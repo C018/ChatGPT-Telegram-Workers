@@ -3,9 +3,9 @@ var Environment = class {
   // -- 版本数据 --
   //
   // 当前版本
-  BUILD_TIMESTAMP = 1706610227;
+  BUILD_TIMESTAMP = 1707118551;
   // 当前版本 commit id
-  BUILD_VERSION = "3350bc5";
+  BUILD_VERSION = "da714dc";
   // -- 基础配置 --
   /**
    * @type {I18n | null}
@@ -87,6 +87,8 @@ var Environment = class {
   HIDE_COMMAND_BUTTONS = ["/role"];
   // 显示快捷回复按钮
   SHOW_REPLY_BUTTON = false;
+  // 而外引用消息开关
+  EXTRA_MESSAGE_CONTEXT = false;
   // -- 模式开关 --
   //
   // 使用流模式
@@ -289,8 +291,10 @@ var Context = class {
     // 会话 id, private 场景为发言人 id, group/supergroup 场景为群组 id
     speakerId: null,
     // 发言人 id
-    role: null
+    role: null,
     // 角色
+    extraMessageContext: null
+    // 额外消息上下文
   };
   /**
    * @inner
@@ -1131,16 +1135,6 @@ async function requestCompletionsFromOpenAI(message, history, context, onStream)
     body: JSON.stringify(body),
     signal
   });
-  if (!resp.ok && !isJsonResponse(resp)) {
-    if (ENV.DEBUG_MODE || ENV.DEV_MODE) {
-      throw new Error(`OpenAI API Error
-> ${resp.statusText}
-Body: ${await resp.text()}`);
-    } else {
-      throw new Error(`OpenAI API Error
-> ${resp.statusText}`);
-    }
-  }
   if (onStream && resp.ok && isEventStreamResponse(resp)) {
     const stream = new Stream(resp, controller);
     let contentFull = "";
@@ -1148,7 +1142,7 @@ Body: ${await resp.text()}`);
     let updateStep = 20;
     try {
       for await (const data of stream) {
-        const c = data.choices?.[0]?.delta?.content || "";
+        const c = data?.choices?.[0]?.delta?.content || "";
         lengthDelta += c.length;
         contentFull = contentFull + c;
         if (lengthDelta > updateStep) {
@@ -1164,10 +1158,21 @@ ERROR: ${e.message}`;
     }
     return contentFull;
   }
+  if (!isJsonResponse(resp)) {
+    if (ENV.DEBUG_MODE || ENV.DEV_MODE) {
+      throw new Error(`OpenAI API Error
+> ${resp.statusText}
+Body: ${await resp.text()}`);
+    } else {
+      throw new Error(`OpenAI API Error
+> ${resp.statusText}`);
+    }
+  }
   const result = await resp.json();
   if (!result) {
     throw new Error("Empty response");
-  } else if (result.error?.message) {
+  }
+  if (result.error?.message) {
     if (ENV.DEBUG_MODE || ENV.DEV_MODE) {
       throw new Error(`OpenAI API Error
 > ${result.error.message}
@@ -1177,8 +1182,8 @@ Body: ${JSON.stringify(body)}`);
 > ${result.error.message}`);
     }
   }
-  setTimeout(() => updateBotUsage(result.usage, context).catch(console.error), 0);
   try {
+    setTimeout(() => updateBotUsage(result?.usage, context).catch(console.error), 0);
     return result.choices[0].message.content;
   } catch (e) {
     throw Error(result?.error?.message || JSON.stringify(result));
@@ -2073,6 +2078,13 @@ async function msgHandleGroupMessage(message, context) {
     return new Response("Non text message", { status: 200 });
   }
   let botName = context.SHARE_CONTEXT.currentBotName;
+  if (message.reply_to_message) {
+    if (`${message.reply_to_message.from.id}` === context.SHARE_CONTEXT.currentBotId) {
+      return null;
+    } else if (ENV.EXTRA_MESSAGE_CONTEXT) {
+      context.SHARE_CONTEXT.extraMessageContext = message.reply_to_message;
+    }
+  }
   if (!botName) {
     const res = await getBot(context.SHARE_CONTEXT.currentBotToken);
     context.SHARE_CONTEXT.currentBotName = res.info.name;
@@ -2080,11 +2092,6 @@ async function msgHandleGroupMessage(message, context) {
   }
   if (botName) {
     let mentioned = false;
-    if (message.reply_to_message) {
-      if (message.reply_to_message.from.username === botName) {
-        mentioned = true;
-      }
-    }
     if (message.entities) {
       let content = "";
       let offset = 0;
@@ -2160,7 +2167,11 @@ async function msgHandleRole(message, context) {
   }
 }
 async function msgChatWithLLM(message, context) {
-  return chatWithLLM(message.text, context, null);
+  let text = message.text;
+  if (ENV.EXTRA_MESSAGE_CONTEXT && context.SHARE_CONTEXT.extraMessageContext && context.SHARE_CONTEXT.extraMessageContext.text) {
+    text = context.SHARE_CONTEXT.extraMessageContext.text + "\n" + text;
+  }
+  return chatWithLLM(text, context, null);
 }
 async function msgProcessByChatType(message, context) {
   const handlerMap = {

@@ -1,5 +1,5 @@
 import "../types/context.js"
-import {cohereSseJsonParser, JSONLDecoder, Stream} from "./stream.js";
+import {cohereSseJsonParser, Stream} from "./stream.js";
 import {requestChatCompletions} from "./request.js";
 
 
@@ -27,7 +27,7 @@ export async function requestCompletionsFromCohereAI(message, prompt, history, c
     const header = {
         'Authorization': `Bearer ${context.USER_CONFIG.COHERE_API_KEY}`,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Accept': onStream !== null ? 'text/event-stream' : 'application/json',
     };
 
     const roleMap = {
@@ -50,18 +50,16 @@ export async function requestCompletionsFromCohereAI(message, prompt, history, c
     if (!body.preamble) {
         delete body.preamble
     }
+
     /**
      * @type {SseChatCompatibleOptions}
      */
     const options = {}
     options.streamBuilder = function (r, c) {
-        return new Stream(r, c, new JSONLDecoder(), cohereSseJsonParser);
+        return new Stream(r, c, null, cohereSseJsonParser);
     }
     options.contentExtractor = function (data) {
-        if (data?.event_type === 'text-generation') {
-            return data?.text;
-        }
-        return null
+        return data?.text;
     }
     options.fullContentExtractor = function (data) {
         return data?.text;

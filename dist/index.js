@@ -87,9 +87,9 @@ var Environment = class {
   // -- 版本数据 --
   //
   // 当前版本
-  BUILD_TIMESTAMP = 1721208791;
+  BUILD_TIMESTAMP = 1721639738;
   // 当前版本 commit id
-  BUILD_VERSION = "2b35eee";
+  BUILD_VERSION = "8f11aec";
   // -- 基础配置 --
   /**
    * @type {I18n | null}
@@ -99,6 +99,8 @@ var Environment = class {
   LANGUAGE = "zh-cn";
   // 检查更新的分支
   UPDATE_BRANCH = "master";
+  // Chat Complete API Timeout
+  CHAT_COMPLETE_API_TIMEOUT = 0;
   // -- Telegram 相关 --
   //
   // Telegram API Domain
@@ -142,13 +144,8 @@ var Environment = class {
   MAX_HISTORY_LENGTH = 20;
   // 最大消息长度
   MAX_TOKEN_LENGTH = 2048;
-  // -- API 相关 --
-  // Chat Complete API Timeout
-  CHAT_COMPLETE_API_TIMEOUT = 0;
   // -- 特性开关 --
   //
-  // 是否开启使用统计
-  ENABLE_USAGE_STATISTICS = false;
   // 隐藏部分命令按钮
   HIDE_COMMAND_BUTTONS = [];
   // 显示快捷回复按钮
@@ -171,10 +168,10 @@ var ENV = new Environment();
 var DATABASE = null;
 var API_GUARD = null;
 var CUSTOM_COMMAND = {};
+var CUSTOM_COMMAND_DESCRIPTION = {};
 var CONST = {
   PASSWORD_KEY: "chat_history_password",
-  GROUP_TYPES: ["group", "supergroup"],
-  USER_AGENT: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.2 Safari/605.1.15"
+  GROUP_TYPES: ["group", "supergroup"]
 };
 var ENV_TYPES = {
   SYSTEM_INIT_MESSAGE: "string",
@@ -243,10 +240,12 @@ function initEnv(env, i18n2) {
   DATABASE = env.DATABASE;
   API_GUARD = env.API_GUARD;
   const customCommandPrefix = "CUSTOM_COMMAND_";
+  const customCommandDescriptionPrefix = "COMMAND_DESCRIPTION_";
   for (const key of Object.keys(env)) {
     if (key.startsWith(customCommandPrefix)) {
       const cmd = key.substring(customCommandPrefix.length);
       CUSTOM_COMMAND["/" + cmd] = env[key];
+      CUSTOM_COMMAND_DESCRIPTION["/" + cmd] = env[customCommandDescriptionPrefix + cmd];
     }
   }
   mergeEnvironment(ENV, env);
@@ -805,13 +804,6 @@ var SSEDecoder = class {
     return [str, "", ""];
   }
 };
-var JSONLDecoder = class {
-  constructor() {
-  }
-  decode(line) {
-    return line;
-  }
-};
 function openaiSseJsonParser(sse) {
   if (sse.data.startsWith("[DONE]")) {
     return { finish: true };
@@ -826,16 +818,20 @@ function openaiSseJsonParser(sse) {
   return {};
 }
 function cohereSseJsonParser(sse) {
-  try {
-    const res = JSON.parse(sse);
-    return {
-      finish: res.is_finished,
-      data: res
-    };
-  } catch (e) {
-    console.error(e, sse);
-    const finish = sse.startsWith('{"is_finished":true');
-    return { finish };
+  switch (sse.event) {
+    case "text-generation":
+      try {
+        return { data: JSON.parse(sse.data) };
+      } catch (e) {
+        console.error(e, sse.data);
+        return {};
+      }
+    case "stream-start":
+      return {};
+    case "stream-end":
+      return { finish: true };
+    default:
+      return {};
   }
 }
 function anthropicSseJsonParser(sse) {
@@ -1156,8 +1152,7 @@ async function requestCompletionsFromGeminiAI(message, prompt, history, context,
   const resp = await fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "User-Agent": CONST.USER_AGENT
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({ contents })
   });
@@ -1204,7 +1199,7 @@ async function requestCompletionsFromCohereAI(message, prompt, history, context,
   const header = {
     "Authorization": `Bearer ${context.USER_CONFIG.COHERE_API_KEY}`,
     "Content-Type": "application/json",
-    "Accept": "application/json"
+    "Accept": onStream !== null ? "text/event-stream" : "application/json"
   };
   const roleMap = {
     "assistant": "CHATBOT",
@@ -1227,13 +1222,10 @@ async function requestCompletionsFromCohereAI(message, prompt, history, context,
   }
   const options = {};
   options.streamBuilder = function(r, c) {
-    return new Stream(r, c, new JSONLDecoder(), cohereSseJsonParser);
+    return new Stream(r, c, null, cohereSseJsonParser);
   };
   options.contentExtractor = function(data) {
-    if (data?.event_type === "text-generation") {
-      return data?.text;
-    }
-    return null;
+    return data?.text;
   };
   options.fullContentExtractor = function(data) {
     return data?.text;
@@ -1690,7 +1682,9 @@ async function commandGenerateImg(message, command, subcommand, context) {
   }
 }
 async function commandGetHelp(message, command, subcommand, context) {
-  const helpMsg = ENV.I18N.command.help.summary + Object.keys(commandHandlers).map((key) => `${key}\uFF1A${ENV.I18N.command.help[key.substring(1)]}`).join("\n");
+  let helpMsg = ENV.I18N.command.help.summary + "\n";
+  helpMsg += Object.keys(commandHandlers).map((key) => `${key}\uFF1A${ENV.I18N.command.help[key.substring(1)]}`).join("\n");
+  helpMsg += Object.keys(CUSTOM_COMMAND).filter((key) => !!CUSTOM_COMMAND_DESCRIPTION[key]).map((key) => `${key}\uFF1A${CUSTOM_COMMAND_DESCRIPTION[key]}`).join("\n");
   return sendMessageToTelegramWithContext(context)(helpMsg);
 }
 async function commandCreateNewChatContext(message, command, subcommand, context) {
@@ -1788,27 +1782,24 @@ async function commandClearUserConfig(message, command, subcommand, context) {
   }
 }
 async function commandFetchUpdate(message, command, subcommand, context) {
-  const config = {
-    headers: {
-      "User-Agent": CONST.USER_AGENT
-    }
-  };
   const current = {
     ts: ENV.BUILD_TIMESTAMP,
     sha: ENV.BUILD_VERSION
   };
-  const repo = `https://raw.githubusercontent.com/TBXark/ChatGPT-Telegram-Workers/${ENV.UPDATE_BRANCH}`;
-  const ts = `${repo}/dist/timestamp`;
-  const info = `${repo}/dist/buildinfo.json`;
-  let online = await fetch(info, config).then((r) => r.json()).catch(() => null);
-  if (!online) {
-    online = await fetch(ts, config).then((r) => r.text()).then((ts2) => ({ ts: Number(ts2.trim()), sha: "unknown" })).catch(() => ({ ts: 0, sha: "unknown" }));
-  }
-  if (current.ts < online.ts) {
-    return sendMessageToTelegramWithContext(context)(`New version detected: ${online.sha}(${online.ts})
-Current version: ${current.sha}(${current.ts})`);
-  } else {
-    return sendMessageToTelegramWithContext(context)(`Current version: ${current.sha}(${current.ts}) is up to date`);
+  try {
+    const info = `https://raw.githubusercontent.com/TBXark/ChatGPT-Telegram-Workers/${ENV.UPDATE_BRANCH}/dist/buildinfo.json`;
+    const online = await fetch(info).then((r) => r.json());
+    const timeFormat = (ts) => {
+      return new Date(ts * 1e3).toLocaleString("en-US", {});
+    };
+    if (current.ts < online.ts) {
+      return sendMessageToTelegramWithContext(context)(`New version detected: ${online.sha}(${timeFormat(online.ts)})
+Current version: ${current.sha}(${timeFormat(current.ts)})`);
+    } else {
+      return sendMessageToTelegramWithContext(context)(`Current version: ${current.sha}(${timeFormat(current.ts)}) is up to date`);
+    }
+  } catch (e) {
+    return sendMessageToTelegramWithContext(context)(`ERROR: ${e.message}`);
   }
 }
 async function commandSystem(message, command, subcommand, context) {
@@ -1929,11 +1920,7 @@ async function bindCommandForTelegram(token) {
     all_group_chats: [],
     all_chat_administrators: []
   };
-  const commands = commandSortList;
-  if (!ENV.ENABLE_USAGE_STATISTICS) {
-    commands.splice(commands.indexOf("/usage"), 1);
-  }
-  for (const key of commands) {
+  for (const key of commandSortList) {
     if (ENV.HIDE_COMMAND_BUTTONS.includes(key)) {
       continue;
     }

@@ -5,9 +5,10 @@ import {
 } from '../telegram/telegram.js';
 import {DATABASE, ENV} from '../config/env.js';
 import {loadChatLLM} from "./agents.js";
+import "../types/agent.js";
 
 /**
- * @return {(function(string): number)}
+ * @returns {(function(string): number)}
  */
 function tokensCounter() {
     return (text) => {
@@ -15,19 +16,13 @@ function tokensCounter() {
     };
 }
 
+
 /**
  * 加载历史TG消息
- *
  * @param {string} key
- * @return {Promise<Object>}
+ * @returns {Promise<HistoryItem[]>}
  */
 async function loadHistory(key) {
-    const historyDisable = ENV.AUTO_TRIM_HISTORY && ENV.MAX_HISTORY_LENGTH <= 0;
-
-    // 判断是否禁用历史记录
-    if (historyDisable) {
-        return {real: [], original: []};
-    }
 
     // 加载历史记录
     let history = [];
@@ -40,31 +35,30 @@ async function loadHistory(key) {
         history = [];
     }
 
-
-    let original = JSON.parse(JSON.stringify(history));
-
     const counter = tokensCounter();
 
     const trimHistory = (list, initLength, maxLength, maxToken) => {
-        // 历史记录超出长度需要裁剪
-        if (list.length > maxLength) {
+        // 历史记录超出长度需要裁剪, 小于0不裁剪
+        if (maxLength >= 0 && list.length > maxLength) {
             list = list.splice(list.length - maxLength);
         }
-        // 处理token长度问题
-        let tokenLength = initLength;
-        for (let i = list.length - 1; i >= 0; i--) {
-            const historyItem = list[i];
-            let length = 0;
-            if (historyItem.content) {
-                length = counter(historyItem.content);
-            } else {
-                historyItem.content = '';
-            }
-            // 如果最大长度超过maxToken,裁剪history
-            tokenLength += length;
-            if (tokenLength > maxToken) {
-                list = list.splice(i + 1);
-                break;
+        // 处理token长度问题, 小于0不裁剪
+        if (maxToken > 0) {
+            let tokenLength = initLength;
+            for (let i = list.length - 1; i >= 0; i--) {
+                const historyItem = list[i];
+                let length = 0;
+                if (historyItem.content) {
+                    length = counter(historyItem.content);
+                } else {
+                    historyItem.content = '';
+                }
+                // 如果最大长度超过maxToken,裁剪history
+                tokenLength += length;
+                if (tokenLength > maxToken) {
+                    list = list.splice(i + 1);
+                    break;
+                }
             }
         }
         return list;
@@ -73,51 +67,63 @@ async function loadHistory(key) {
     // 裁剪
     if (ENV.AUTO_TRIM_HISTORY && ENV.MAX_HISTORY_LENGTH > 0) {
         history = trimHistory(history, 0, ENV.MAX_HISTORY_LENGTH, ENV.MAX_TOKEN_LENGTH);
-        original = trimHistory(original, 0, ENV.MAX_HISTORY_LENGTH, ENV.MAX_TOKEN_LENGTH);
     }
 
-    return {real: history, original: original};
+    return history;
 }
 
+/**
+ * @typedef {object} LlmModifierResult
+ * @property {HistoryItem[]} history
+ * @property {string} message
+ * @typedef {function(HistoryItem[], string): LlmModifierResult} LlmModifier
+ */
+
+/**
+ * @typedef {function (string): Promise<any>} StreamResultHandler
+ */
 
 /**
  *
- * @param {string} text
- * @param {string | null} prompt
+ * @param {LlmRequestParams} params
  * @param {ContextType} context
- * @param {function} llm
- * @param {function} modifier
- * @param {function} onStream
- * @return {Promise<string>}
+ * @param {ChatAgentRequest} llm
+ * @param {LlmModifier} modifier
+ * @param {StreamResultHandler} onStream
+ * @returns {Promise<string>}
  */
-async function requestCompletionsFromLLM(text, prompt, context, llm, modifier, onStream) {
+async function requestCompletionsFromLLM(params, context, llm, modifier, onStream) {
     const historyDisable = ENV.AUTO_TRIM_HISTORY && ENV.MAX_HISTORY_LENGTH <= 0;
     const historyKey = context.SHARE_CONTEXT.chatHistoryKey;
+    const { message, images } = params;
     let history = await loadHistory(historyKey);
     if (modifier) {
-        const modifierData = modifier(history, text);
+        const modifierData = modifier(history, message);
         history = modifierData.history;
-        text = modifierData.text;
+        params.message = modifierData.message;
     }
-    const {real: realHistory, original: originalHistory} = history;
-    const answer = await llm(text, prompt, realHistory, context, onStream);
+    const llmParams = {
+        ...params,
+        history: history,
+        prompt: context.USER_CONFIG.SYSTEM_INIT_MESSAGE,
+    };
+    const answer = await llm(llmParams, context, onStream);
     if (!historyDisable) {
-        originalHistory.push({role: 'user', content: text || ''});
-        originalHistory.push({role: 'assistant', content: answer});
-        await DATABASE.put(historyKey, JSON.stringify(originalHistory)).catch(console.error);
+        history.push({role: 'user', content: message || '', images});
+        history.push({role: 'assistant', content: answer});
+        await DATABASE.put(historyKey, JSON.stringify(history)).catch(console.error);
     }
     return answer;
 }
 
 /**
  * 与LLM聊天
- *
- * @param {string|null} text
+ * @param {LlmRequestParams} params
  * @param {ContextType} context
- * @param {function} modifier
- * @return {Promise<Response>}
+ * @param {LlmModifier} modifier
+ * @returns {Promise<Response>}
  */
-export async function chatWithLLM(text, context, modifier) {
+export async function chatWithLLM(params, context, modifier) {
     try {
         try {
             const msg = await sendMessageToTelegramWithContext(context)('...').then((r) => r.json());
@@ -162,8 +168,7 @@ export async function chatWithLLM(text, context, modifier) {
         if (llm === null) {
             return sendMessageToTelegramWithContext(context)(`LLM is not enable`);
         }
-        const prompt = context.USER_CONFIG.SYSTEM_INIT_MESSAGE;
-        const answer = await requestCompletionsFromLLM(text, prompt, context, llm, modifier, onStream);
+        const answer = await requestCompletionsFromLLM(params, context, llm, modifier, onStream);
         context.CURRENT_CHAT_CONTEXT.parse_mode = parseMode;
         if (ENV.SHOW_REPLY_BUTTON && context.CURRENT_CHAT_CONTEXT.message_id) {
             try {

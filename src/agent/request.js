@@ -1,27 +1,30 @@
-import "../types/context.js";
-import {ENV} from "../config/env.js";
-import {Stream} from "./stream.js";
+import '../types/context.js';
+import {ENV} from '../config/env.js';
+import {Stream} from './stream.js';
 
 
 /**
- *
- * @typedef {function} StreamBuilder
+ * @callback StreamBuilder
  * @param {Response} resp
  * @param {AbortController} controller
- * @return {Stream}
- *
- * @typedef {function} SSEContentExtractor
+ * @returns {Stream}
+ */
+/** 
+ * @callback SSEContentExtractor
  * @param {object} data
- * @return {string|null}
- *
- * @typedef {function} FullContentExtractor
+ * @returns {string|null}
+ */
+/**
+ * @callback FullContentExtractor
  * @param {object} data
- * @return {string|null}
- *
- * @typedef {object} ErrorExtractor
+ * @returns {string|null}
+ */
+/** 
+ * @callback ErrorExtractor
  * @param {object} data
- * @return {string|null}
- *
+ * @returns {string|null}
+ */
+/**
  * @typedef {object} SseChatCompatibleOptions
  * @property {StreamBuilder} streamBuilder
  * @property {SSEContentExtractor} contentExtractor
@@ -31,22 +34,21 @@ import {Stream} from "./stream.js";
 
 /**
  * 修复OpenAI兼容的选项
- *
  * @param {SseChatCompatibleOptions | null} options
- * @return {SseChatCompatibleOptions}
+ * @returns {SseChatCompatibleOptions}
  */
 function fixOpenAICompatibleOptions(options) {
     options = options || {};
-    options.streamBuilder = options.streamBuilder || function (r, c) {
+    options.streamBuilder = options.streamBuilder || function(r, c) {
         return new Stream(r, c);
     };
-    options.contentExtractor = options.contentExtractor || function (d) {
+    options.contentExtractor = options.contentExtractor || function(d) {
         return d?.choices?.[0]?.delta?.content;
     };
-    options.fullContentExtractor = options.fullContentExtractor || function (d) {
+    options.fullContentExtractor = options.fullContentExtractor || function(d) {
         return d.choices?.[0]?.message.content;
     };
-    options.errorExtractor = options.errorExtractor || function (d) {
+    options.errorExtractor = options.errorExtractor || function(d) {
         return d.error?.message;
     };
     return options;
@@ -54,7 +56,7 @@ function fixOpenAICompatibleOptions(options) {
 
 /**
  * @param {Response} resp
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isJsonResponse(resp) {
     return resp.headers.get('content-type').indexOf('json') !== -1;
@@ -62,7 +64,7 @@ export function isJsonResponse(resp) {
 
 /**
  * @param {Response} resp
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isEventStreamResponse(resp) {
     const types = ['application/stream+json', 'text/event-stream'];
@@ -77,21 +79,21 @@ export function isEventStreamResponse(resp) {
 
 /**
  * 发送请求到支持sse的聊天接口
- *
- * @param {string | null} url
+ * @param {string} url
  * @param {object} header
  * @param {object} body
  * @param {ContextType} context
- * @param {function} onStream
- * @param {function} onResult
+ * @param {AgentTextHandler| null} onStream
+ * @param {AgentTextHandler | null} onResult
  * @param {SseChatCompatibleOptions | null} options
- * @return {Promise<string>}
+ * @returns {Promise<string>}
  */
 export async function requestChatCompletions(url, header, body, context, onStream, onResult = null, options = null) {
     const controller = new AbortController();
     const {signal} = controller;
 
     let timeoutID = null;
+    let lastUpdateTime = Date.now();
     if (ENV.CHAT_COMPLETE_API_TIMEOUT > 0) {
         timeoutID = setTimeout(() => controller.abort(), ENV.CHAT_COMPLETE_API_TIMEOUT);
     }
@@ -123,6 +125,13 @@ export async function requestChatCompletions(url, header, body, context, onStrea
                 lengthDelta += c.length;
                 contentFull = contentFull + c;
                 if (lengthDelta > updateStep) {
+                    if (ENV.TELEGRAM_MIN_STREAM_INTERVAL > 0) {
+                        const delta = Date.now() - lastUpdateTime;
+                        if (delta < ENV.TELEGRAM_MIN_STREAM_INTERVAL) {
+                            continue;
+                        }
+                        lastUpdateTime = Date.now();
+                    }
                     lengthDelta = 0;
                     updateStep += 20;
                     await onStream(`${contentFull}\n...`);
@@ -149,7 +158,7 @@ export async function requestChatCompletions(url, header, body, context, onStrea
     }
 
     try {
-        onResult?.(result);
+        await onResult?.(result);
         return options.fullContentExtractor(result);
     } catch (e) {
         console.error(e);

@@ -1,72 +1,58 @@
-import {isOpenAIEnable, requestCompletionsFromOpenAI, requestImageFromOpenAI} from "./openai.js";
-import {isWorkersAIEnable, requestCompletionsFromWorkersAI, requestImageFromWorkersAI} from "./workersai.js";
-import {isGeminiAIEnable, requestCompletionsFromGeminiAI} from "./gemini.js";
-import {isMistralAIEnable, requestCompletionsFromMistralAI} from "./mistralai.js";
-import {isCohereAIEnable, requestCompletionsFromCohereAI} from "./cohere.js";
-import {isAnthropicAIEnable, requestCompletionsFromAnthropicAI} from "./anthropic.js";
+import {isOpenAIEnable, requestCompletionsFromOpenAI, requestImageFromOpenAI} from './openai.js';
+import {isWorkersAIEnable, requestCompletionsFromWorkersAI, requestImageFromWorkersAI} from './workersai.js';
+import {isGeminiAIEnable, requestCompletionsFromGeminiAI} from './gemini.js';
+import {isMistralAIEnable, requestCompletionsFromMistralAI} from './mistralai.js';
+import {isCohereAIEnable, requestCompletionsFromCohereAI} from './cohere.js';
+import {isAnthropicAIEnable, requestCompletionsFromAnthropicAI} from './anthropic.js';
 import {
     isAzureEnable,
     isAzureImageEnable,
     requestCompletionsFromAzureOpenAI,
-    requestImageFromAzureOpenAI
-} from "./azure.js";
-import "../types/context.js";
+    requestImageFromAzureOpenAI,
+} from './azure.js';
+import '../types/context.js';
+import '../types/agent.js';
 
-/**
- *
- * @typedef {function} ChatAgentRequest
- * @param {string} message
- * @param {string} prompt
- * @param {Array} history
- * @param {ContextType} context
- * @param {function} onStream
- * @return {Promise<string>}
- * */
-/**
- * @typedef {object} ChatAgent
- * @property {string} name
- * @property {function} enable
- * @property {ChatAgentRequest} request
- */
+
 /**
  * @type {ChatAgent[]}
  */
 export const chatLlmAgents = [
     {
-        name: "azure",
+        name: 'azure',
         enable: isAzureEnable,
-        request: requestCompletionsFromAzureOpenAI
+        request: requestCompletionsFromAzureOpenAI,
     },
     {
-        name: "openai",
+        name: 'openai',
         enable: isOpenAIEnable,
-        request: requestCompletionsFromOpenAI
+        request: requestCompletionsFromOpenAI,
     },
     {
-        name: "workers",
+        name: 'workers',
         enable: isWorkersAIEnable,
-        request: requestCompletionsFromWorkersAI
+        request: requestCompletionsFromWorkersAI,
     },
     {
-        name: "gemini",
+        name: 'gemini',
         enable: isGeminiAIEnable,
-        request: requestCompletionsFromGeminiAI
+        request: requestCompletionsFromGeminiAI,
     },
     {
-        name: "mistral",
+        name: 'mistral',
         enable: isMistralAIEnable,
-        request: requestCompletionsFromMistralAI
+        request: requestCompletionsFromMistralAI,
     },
     {
-        name: "cohere",
+        name: 'cohere',
         enable: isCohereAIEnable,
-        request: requestCompletionsFromCohereAI
+        request: requestCompletionsFromCohereAI,
     },
     {
-        name: "anthropic",
+        name: 'anthropic',
         enable: isAnthropicAIEnable,
-        request: requestCompletionsFromAnthropicAI
-    }
+        request: requestCompletionsFromAnthropicAI,
+    },
 ];
 
 /**
@@ -76,27 +62,27 @@ export const chatLlmAgents = [
  */
 export function currentChatModel(agentName, context) {
     switch (agentName) {
-        case "azure":
-            try {
-                const url = new URL(context.USER_CONFIG.AZURE_COMPLETIONS_API);
-                return url.pathname.split("/")[3];
-            } catch  {
-                return context.USER_CONFIG.AZURE_COMPLETIONS_API;
-            }
-        case "openai":
-            return context.USER_CONFIG.OPENAI_CHAT_MODEL;
-        case "workers":
-            return context.USER_CONFIG.WORKERS_CHAT_MODEL;
-        case "gemini":
-            return context.USER_CONFIG.GOOGLE_COMPLETIONS_MODEL;
-        case "mistral":
-            return context.USER_CONFIG.MISTRAL_CHAT_MODEL;
-        case "cohere":
-            return context.USER_CONFIG.COHERE_CHAT_MODEL;
-        case "anthropic":
-            return context.USER_CONFIG.ANTHROPIC_CHAT_MODEL;
-        default:
-            return null;
+    case 'azure':
+        try {
+            const url = new URL(context.USER_CONFIG.AZURE_COMPLETIONS_API);
+            return url.pathname.split('/')[3];
+        } catch {
+            return context.USER_CONFIG.AZURE_COMPLETIONS_API;
+        }
+    case 'openai':
+        return context.USER_CONFIG.OPENAI_CHAT_MODEL;
+    case 'workers':
+        return context.USER_CONFIG.WORKERS_CHAT_MODEL;
+    case 'gemini':
+        return context.USER_CONFIG.GOOGLE_COMPLETIONS_MODEL;
+    case 'mistral':
+        return context.USER_CONFIG.MISTRAL_CHAT_MODEL;
+    case 'cohere':
+        return context.USER_CONFIG.COHERE_CHAT_MODEL;
+    case 'anthropic':
+        return context.USER_CONFIG.ANTHROPIC_CHAT_MODEL;
+    default:
+        return null;
     }
 }
 
@@ -106,31 +92,30 @@ export function currentChatModel(agentName, context) {
  */
 export function chatModelKey(agentName) {
     switch (agentName) {
-        case "azure":
-            return "AZURE_COMPLETIONS_API";
-        case "openai":
-            return "OPENAI_CHAT_MODEL";
-        case "workers":
-            return "WORKERS_CHAT_MODEL";
-        case "gemini":
-            return "GOOGLE_COMPLETIONS_MODEL";
-        case "mistral":
-            return "MISTRAL_CHAT_MODEL";
-        case "cohere":
-            return "COHERE_CHAT_MODEL";
-        case "anthropic":
-            return "ANTHROPIC_CHAT_MODEL";
-        default:
-            return null;
+    case 'azure':
+        return 'AZURE_COMPLETIONS_API';
+    case 'openai':
+        return 'OPENAI_CHAT_MODEL';
+    case 'workers':
+        return 'WORKERS_CHAT_MODEL';
+    case 'gemini':
+        return 'GOOGLE_COMPLETIONS_MODEL';
+    case 'mistral':
+        return 'MISTRAL_CHAT_MODEL';
+    case 'cohere':
+        return 'COHERE_CHAT_MODEL';
+    case 'anthropic':
+        return 'ANTHROPIC_CHAT_MODEL';
+    default:
+        return null;
     }
 }
 
 
 /**
  * 加载聊天AI
- *
  * @param {ContextType} context
- * @return {ChatAgent | null}
+ * @returns {?ChatAgent}
  */
 export function loadChatLLM(context) {
     for (const llm of chatLlmAgents) {
@@ -147,46 +132,32 @@ export function loadChatLLM(context) {
     return null;
 }
 
-
-/**
- *
- * @typedef {function} ImageAgentRequest
- * @param {string} prompt
- * @param {ContextType} context
- */
-/**
- * @typedef {object} ImageAgent
- * @property {string} name
- * @property {function} enable
- * @property {ImageAgentRequest} request
- */
 /**
  * @type {ImageAgent[]}
  */
 export const imageGenAgents = [
     {
-        name: "azure",
+        name: 'azure',
         enable: isAzureImageEnable,
-        request: requestImageFromAzureOpenAI
+        request: requestImageFromAzureOpenAI,
     },
     {
-        name: "openai",
+        name: 'openai',
         enable: isOpenAIEnable,
-        request: requestImageFromOpenAI
+        request: requestImageFromOpenAI,
     },
     {
-        name: "workers",
+        name: 'workers',
         enable: isWorkersAIEnable,
-        request: requestImageFromWorkersAI
-    }
+        request: requestImageFromWorkersAI,
+    },
 ];
 
 
 /**
  * 加载图片AI
- *
  * @param {ContextType} context
- * @return {ImageAgent | null}
+ * @returns {?ImageAgent}
  */
 export function loadImageGen(context) {
     for (const imgGen of imageGenAgents) {
@@ -210,19 +181,19 @@ export function loadImageGen(context) {
  */
 export function currentImageModel(agentName, context) {
     switch (agentName) {
-        case "azure":
-            try {
-                const url = new URL(context.USER_CONFIG.AZURE_DALLE_API);
-                return url.pathname.split("/")[3];
-            } catch  {
-                return context.USER_CONFIG.AZURE_DALLE_API;
-            }
-        case "openai":
-            return context.USER_CONFIG.DALL_E_MODEL;
-        case "workers":
-            return context.USER_CONFIG.WORKERS_IMAGE_MODEL;
-        default:
-            return null;
+    case 'azure':
+        try {
+            const url = new URL(context.USER_CONFIG.AZURE_DALLE_API);
+            return url.pathname.split('/')[3];
+        } catch {
+            return context.USER_CONFIG.AZURE_DALLE_API;
+        }
+    case 'openai':
+        return context.USER_CONFIG.DALL_E_MODEL;
+    case 'workers':
+        return context.USER_CONFIG.WORKERS_IMAGE_MODEL;
+    default:
+        return null;
     }
 }
 
@@ -232,13 +203,13 @@ export function currentImageModel(agentName, context) {
  */
 export function imageModelKey(agentName) {
     switch (agentName) {
-        case "azure":
-            return "AZURE_DALLE_API";
-        case "openai":
-            return "DALL_E_MODEL";
-        case "workers":
-            return "WORKERS_IMAGE_MODEL";
-        default:
-            return null;
+    case 'azure':
+        return 'AZURE_DALLE_API';
+    case 'openai':
+        return 'DALL_E_MODEL';
+    case 'workers':
+        return 'WORKERS_IMAGE_MODEL';
+    default:
+        return null;
     }
 }

@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "lib": [
+            "ESNext",
+            "dom"
+        ],
+        "rootDir": ".",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "types": ["node"],
+        "allowJs": true,
+        "strict": true,
+        "declaration": true,
+        "declarationMap": true,
+        "outDir": "dist",
+        "removeComments": true,
+        "esModuleInterop": true
+    },
+    "include": ["src/**/*"]
+}

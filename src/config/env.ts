@@ -1,5 +1,5 @@
-import loadI18n from '../i18n';
 import type { APIGuard, CommandConfig, KVNamespace } from './types';
+import loadI18n from '../i18n';
 import {
     AgentShareConfig,
     AnthropicConfig,
@@ -70,6 +70,11 @@ class Environment extends EnvironmentConfig {
 
     DATABASE: KVNamespace = null as any;
     API_GUARD: APIGuard | null = null;
+
+    constructor() {
+        super();
+        this.merge = this.merge.bind(this);
+    }
 
     merge(source: any) {
         // 全局对象

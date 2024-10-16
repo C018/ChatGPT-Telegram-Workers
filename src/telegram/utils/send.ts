@@ -1,7 +1,7 @@
 import type * as Telegram from 'telegram-bot-api-types';
 import type { TelegramBotAPI } from '../api';
-import { createTelegramBotAPI } from '../api';
 import { ENV } from '../../config/env';
+import { createTelegramBotAPI } from '../api';
 import { escape } from './md2tgmd';
 
 class MessageContext implements Record<string, any> {
@@ -30,6 +30,9 @@ export class MessageSender {
     constructor(token: string, context: MessageContext) {
         this.api = createTelegramBotAPI(token);
         this.context = context;
+        this.sendRichText = this.sendRichText.bind(this);
+        this.sendPlainText = this.sendPlainText.bind(this);
+        this.sendPhoto = this.sendPhoto.bind(this);
     }
 
     static from(token: string, message: Telegram.Message): MessageSender {

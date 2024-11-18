@@ -1,33 +1,3 @@
-const en = { "env": { "system_init_message": "You are a helpful assistant" }, "command": { "help": { "summary": "The following commands are currently supported:\n", "help": "Get command help", "new": "Start a new conversation", "start": "Get your ID and start a new conversation", "img": "Generate an image, the complete command format is `/img image description`, for example `/img beach at moonlight`", "version": "Get the current version number to determine whether to update", "setenv": "Set user configuration, the complete command format is /setenv KEY=VALUE", "setenvs": 'Batch set user configurations, the full format of the command is /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "Delete user configuration, the complete command format is /delenv KEY", "clearenv": "Clear all user configuration", "system": "View some system information", "redo": "Redo the last conversation, /redo with modified content or directly /redo", "echo": "Echo the message", "models": "switch chat model" }, "new": { "new_chat_start": "A new conversation has started" } }, "callback_query": { "open_model_list": "Open models list", "select_provider": "Select a provider:", "select_model": "Choose model:", "change_model": "Change model to " } };
-
-const pt = { "env": { "system_init_message": "Você é um assistente útil" }, "command": { "help": { "summary": "Os seguintes comandos são suportados atualmente:\n", "help": "Obter ajuda sobre comandos", "new": "Iniciar uma nova conversa", "start": "Obter seu ID e iniciar uma nova conversa", "img": "Gerar uma imagem, o formato completo do comando é `/img descrição da imagem`, por exemplo `/img praia ao luar`", "version": "Obter o número da versão atual para determinar se é necessário atualizar", "setenv": "Definir configuração do usuário, o formato completo do comando é /setenv CHAVE=VALOR", "setenvs": 'Definir configurações do usuário em lote, o formato completo do comando é /setenvs {"CHAVE1": "VALOR1", "CHAVE2": "VALOR2"}', "delenv": "Excluir configuração do usuário, o formato completo do comando é /delenv CHAVE", "clearenv": "Limpar todas as configurações do usuário", "system": "Ver algumas informações do sistema", "redo": "Refazer a última conversa, /redo com conteúdo modificado ou diretamente /redo", "echo": "Repetir a mensagem", "models": "Mudar o modelo de diálogo" }, "new": { "new_chat_start": "Uma nova conversa foi iniciada" } }, "callback_query": { "open_model_list": "Abra a lista de modelos", "select_provider": "Escolha um fornecedor de modelos.:", "select_model": "Escolha um modelo:", "change_model": "O modelo de diálogo já foi modificado para" } };
-
-const zhHans = { "env": { "system_init_message": "你是一个得力的助手" }, "command": { "help": { "summary": "当前支持以下命令:\n", "help": "获取命令帮助", "new": "发起新的对话", "start": "获取你的ID, 并发起新的对话", "img": "生成一张图片, 命令完整格式为 `/img 图片描述`, 例如`/img 月光下的沙滩`", "version": "获取当前版本号, 判断是否需要更新", "setenv": "设置用户配置，命令完整格式为 /setenv KEY=VALUE", "setenvs": '批量设置用户配置, 命令完整格式为 /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "删除用户配置，命令完整格式为 /delenv KEY", "clearenv": "清除所有用户配置", "system": "查看当前一些系统信息", "redo": "重做上一次的对话, /redo 加修改过的内容 或者 直接 /redo", "echo": "回显消息", "models": "切换对话模型" }, "new": { "new_chat_start": "新的对话已经开始" } }, "callback_query": { "open_model_list": "打开模型列表", "select_provider": "选择一个模型提供商:", "select_model": "选择一个模型:", "change_model": "对话模型已修改至" } };
-
-const zhHant = { "env": { "system_init_message": "你是一個得力的助手" }, "command": { "help": { "summary": "當前支持的命令如下：\n", "help": "獲取命令幫助", "new": "開始一個新對話", "start": "獲取您的ID並開始一個新對話", "img": "生成圖片，完整命令格式為`/img 圖片描述`，例如`/img 海灘月光`", "version": "獲取當前版本號確認是否需要更新", "setenv": "設置用戶配置，完整命令格式為/setenv KEY=VALUE", "setenvs": '批量設置用户配置, 命令完整格式為 /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "刪除用戶配置，完整命令格式為/delenv KEY", "clearenv": "清除所有用戶配置", "system": "查看一些系統信息", "redo": "重做上一次的對話 /redo 加修改過的內容 或者 直接 /redo", "echo": "回显消息", "models": "切換對話模式" }, "new": { "new_chat_start": "開始一個新對話" } }, "callback_query": { "open_model_list": "打開模型清單", "select_provider": "選擇一個模型供應商:", "select_model": "選擇一個模型:", "change_model": "對話模型已經修改至" } };
-
-function loadI18n(lang) {
-  switch (lang?.toLowerCase()) {
-    case "cn":
-    case "zh-cn":
-    case "zh-hans":
-      return zhHans;
-    case "zh-tw":
-    case "zh-hk":
-    case "zh-mo":
-    case "zh-hant":
-      return zhHant;
-    case "pt":
-    case "pt-br":
-      return pt;
-    case "en":
-    case "en-us":
-      return en;
-    default:
-      return en;
-  }
-}
-
 class EnvironmentConfig {
   LANGUAGE = "zh-cn";
   UPDATE_BRANCH = "master";
@@ -103,7 +73,7 @@ class GeminiConfig {
   GOOGLE_API_KEY = null;
   GOOGLE_API_BASE = "https://generativelanguage.googleapis.com/v1beta";
   GOOGLE_COMPLETIONS_MODEL = "gemini-1.5-flash";
-  GOOGLE_CHAT_MODELS_LIST = `["gemini-1.5-flash"]`;
+  GOOGLE_CHAT_MODELS_LIST = "";
 }
 class MistralConfig {
   MISTRAL_API_KEY = null;
@@ -126,7 +96,31 @@ class AnthropicConfig {
 class DefineKeys {
   DEFINE_KEYS = [];
 }
-
+const en = { "env": { "system_init_message": "You are a helpful assistant" }, "command": { "help": { "summary": "The following commands are currently supported:\n", "help": "Get command help", "new": "Start a new conversation", "start": "Get your ID and start a new conversation", "img": "Generate an image, the complete command format is `/img image description`, for example `/img beach at moonlight`", "version": "Get the current version number to determine whether to update", "setenv": "Set user configuration, the complete command format is /setenv KEY=VALUE", "setenvs": 'Batch set user configurations, the full format of the command is /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "Delete user configuration, the complete command format is /delenv KEY", "clearenv": "Clear all user configuration", "system": "View some system information", "redo": "Redo the last conversation, /redo with modified content or directly /redo", "echo": "Echo the message", "models": "switch chat model" }, "new": { "new_chat_start": "A new conversation has started" } }, "callback_query": { "open_model_list": "Open models list", "select_provider": "Select a provider:", "select_model": "Choose model:", "change_model": "Change model to " } };
+const pt = { "env": { "system_init_message": "Você é um assistente útil" }, "command": { "help": { "summary": "Os seguintes comandos são suportados atualmente:\n", "help": "Obter ajuda sobre comandos", "new": "Iniciar uma nova conversa", "start": "Obter seu ID e iniciar uma nova conversa", "img": "Gerar uma imagem, o formato completo do comando é `/img descrição da imagem`, por exemplo `/img praia ao luar`", "version": "Obter o número da versão atual para determinar se é necessário atualizar", "setenv": "Definir configuração do usuário, o formato completo do comando é /setenv CHAVE=VALOR", "setenvs": 'Definir configurações do usuário em lote, o formato completo do comando é /setenvs {"CHAVE1": "VALOR1", "CHAVE2": "VALOR2"}', "delenv": "Excluir configuração do usuário, o formato completo do comando é /delenv CHAVE", "clearenv": "Limpar todas as configurações do usuário", "system": "Ver algumas informações do sistema", "redo": "Refazer a última conversa, /redo com conteúdo modificado ou diretamente /redo", "echo": "Repetir a mensagem", "models": "Mudar o modelo de diálogo" }, "new": { "new_chat_start": "Uma nova conversa foi iniciada" } }, "callback_query": { "open_model_list": "Abra a lista de modelos", "select_provider": "Escolha um fornecedor de modelos.:", "select_model": "Escolha um modelo:", "change_model": "O modelo de diálogo já foi modificado para" } };
+const zhHans = { "env": { "system_init_message": "你是一个得力的助手" }, "command": { "help": { "summary": "当前支持以下命令:\n", "help": "获取命令帮助", "new": "发起新的对话", "start": "获取你的ID, 并发起新的对话", "img": "生成一张图片, 命令完整格式为 `/img 图片描述`, 例如`/img 月光下的沙滩`", "version": "获取当前版本号, 判断是否需要更新", "setenv": "设置用户配置，命令完整格式为 /setenv KEY=VALUE", "setenvs": '批量设置用户配置, 命令完整格式为 /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "删除用户配置，命令完整格式为 /delenv KEY", "clearenv": "清除所有用户配置", "system": "查看当前一些系统信息", "redo": "重做上一次的对话, /redo 加修改过的内容 或者 直接 /redo", "echo": "回显消息", "models": "切换对话模型" }, "new": { "new_chat_start": "新的对话已经开始" } }, "callback_query": { "open_model_list": "打开模型列表", "select_provider": "选择一个模型提供商:", "select_model": "选择一个模型:", "change_model": "对话模型已修改至" } };
+const zhHant = { "env": { "system_init_message": "你是一個得力的助手" }, "command": { "help": { "summary": "當前支持的命令如下：\n", "help": "獲取命令幫助", "new": "開始一個新對話", "start": "獲取您的ID並開始一個新對話", "img": "生成圖片，完整命令格式為`/img 圖片描述`，例如`/img 海灘月光`", "version": "獲取當前版本號確認是否需要更新", "setenv": "設置用戶配置，完整命令格式為/setenv KEY=VALUE", "setenvs": '批量設置用户配置, 命令完整格式為 /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "刪除用戶配置，完整命令格式為/delenv KEY", "clearenv": "清除所有用戶配置", "system": "查看一些系統信息", "redo": "重做上一次的對話 /redo 加修改過的內容 或者 直接 /redo", "echo": "回显消息", "models": "切換對話模式" }, "new": { "new_chat_start": "開始一個新對話" } }, "callback_query": { "open_model_list": "打開模型清單", "select_provider": "選擇一個模型供應商:", "select_model": "選擇一個模型:", "change_model": "對話模型已經修改至" } };
+function loadI18n(lang) {
+  switch (lang?.toLowerCase()) {
+    case "cn":
+    case "zh-cn":
+    case "zh-hans":
+      return zhHans;
+    case "zh-tw":
+    case "zh-hk":
+    case "zh-mo":
+    case "zh-hant":
+      return zhHant;
+    case "pt":
+    case "pt-br":
+      return pt;
+    case "en":
+    case "en-us":
+      return en;
+    default:
+      return en;
+  }
+}
 class ConfigMerger {
   static parseArray(raw) {
     raw = raw.trim();
@@ -198,10 +192,8 @@ class ConfigMerger {
     }
   }
 }
-
-const BUILD_TIMESTAMP = 1731464647;
-const BUILD_VERSION = "fe9ef45";
-
+const BUILD_TIMESTAMP = 1731649723;
+const BUILD_VERSION = "76928f4";
 function createAgentUserConfig() {
   return Object.assign(
     {},
@@ -232,6 +224,7 @@ class Environment extends EnvironmentConfig {
   PLUGINS_COMMAND = {};
   DATABASE = null;
   API_GUARD = null;
+  CUSTOM_MESSAGE_RENDER = null;
   constructor() {
     super();
     this.merge = this.merge.bind(this);
@@ -307,9 +300,6 @@ class Environment extends EnvironmentConfig {
     if (source.CHAT_MODEL && !this.USER_CONFIG.OPENAI_CHAT_MODEL) {
       this.USER_CONFIG.OPENAI_CHAT_MODEL = source.CHAT_MODEL;
     }
-    if (!this.USER_CONFIG.SYSTEM_INIT_MESSAGE) {
-      this.USER_CONFIG.SYSTEM_INIT_MESSAGE = this.I18N?.env?.system_init_message || "You are a helpful assistant";
-    }
     if (source.GOOGLE_COMPLETIONS_API && !this.USER_CONFIG.GOOGLE_API_BASE) {
       this.USER_CONFIG.GOOGLE_API_BASE = source.GOOGLE_COMPLETIONS_API.replace(/\/models\/?$/, "");
     }
@@ -331,7 +321,125 @@ class Environment extends EnvironmentConfig {
   }
 }
 const ENV = new Environment();
-
+class ShareContext {
+  botId;
+  botToken;
+  botName = null;
+  chatHistoryKey;
+  lastMessageKey;
+  configStoreKey;
+  groupAdminsKey;
+  constructor(token, update) {
+    const botId = Number.parseInt(token.split(":")[0]);
+    const telegramIndex = ENV.TELEGRAM_AVAILABLE_TOKENS.indexOf(token);
+    if (telegramIndex === -1) {
+      throw new Error("Token not allowed");
+    }
+    if (ENV.TELEGRAM_BOT_NAME.length > telegramIndex) {
+      this.botName = ENV.TELEGRAM_BOT_NAME[telegramIndex];
+    }
+    this.botToken = token;
+    this.botId = botId;
+    const id = update.chatID;
+    if (id === void 0 || id === null) {
+      throw new Error("Chat id not found");
+    }
+    let historyKey = `history:${id}`;
+    let configStoreKey = `user_config:${id}`;
+    if (botId) {
+      historyKey += `:${botId}`;
+      configStoreKey += `:${botId}`;
+    }
+    switch (update.chatType) {
+      case "group":
+      case "supergroup":
+        if (!ENV.GROUP_CHAT_BOT_SHARE_MODE && update.fromUserID) {
+          historyKey += `:${update.fromUserID}`;
+          configStoreKey += `:${update.fromUserID}`;
+        }
+        this.groupAdminsKey = `group_admin:${id}`;
+        break;
+    }
+    if (update.isForum && update.isTopicMessage) {
+      if (update.messageThreadID) {
+        historyKey += `:${update.messageThreadID}`;
+        configStoreKey += `:${update.messageThreadID}`;
+      }
+    }
+    this.chatHistoryKey = historyKey;
+    this.lastMessageKey = `last_message_id:${historyKey}`;
+    this.configStoreKey = configStoreKey;
+  }
+}
+class WorkerContext {
+  USER_CONFIG;
+  SHARE_CONTEXT;
+  constructor(USER_CONFIG, SHARE_CONTEXT) {
+    this.USER_CONFIG = USER_CONFIG;
+    this.SHARE_CONTEXT = SHARE_CONTEXT;
+    this.execChangeAndSave = this.execChangeAndSave.bind(this);
+  }
+  static async from(token, update) {
+    const context = new UpdateContext(update);
+    const SHARE_CONTEXT = new ShareContext(token, context);
+    const USER_CONFIG = Object.assign({}, ENV.USER_CONFIG);
+    try {
+      const userConfig = JSON.parse(await ENV.DATABASE.get(SHARE_CONTEXT.configStoreKey));
+      ConfigMerger.merge(USER_CONFIG, ConfigMerger.trim(userConfig, ENV.LOCK_USER_CONFIG_KEYS) || {});
+    } catch (e) {
+      console.warn(e);
+    }
+    return new WorkerContext(USER_CONFIG, SHARE_CONTEXT);
+  }
+  async execChangeAndSave(values) {
+    for (const ent of Object.entries(values || {})) {
+      let [key, value] = ent;
+      key = ENV_KEY_MAPPER[key] || key;
+      if (ENV.LOCK_USER_CONFIG_KEYS.includes(key)) {
+        throw new Error(`Key ${key} is locked`);
+      }
+      const configKeys = Object.keys(this.USER_CONFIG || {}) || [];
+      if (!configKeys.includes(key)) {
+        throw new Error(`Key ${key} is not allowed`);
+      }
+      this.USER_CONFIG.DEFINE_KEYS.push(key);
+      ConfigMerger.merge(this.USER_CONFIG, {
+        [key]: value
+      });
+      console.log("Update user config: ", key, this.USER_CONFIG[key]);
+    }
+    this.USER_CONFIG.DEFINE_KEYS = Array.from(new Set(this.USER_CONFIG.DEFINE_KEYS));
+    await ENV.DATABASE.put(
+      this.SHARE_CONTEXT.configStoreKey,
+      JSON.stringify(ConfigMerger.trim(this.USER_CONFIG, ENV.LOCK_USER_CONFIG_KEYS))
+    );
+  }
+}
+class UpdateContext {
+  fromUserID;
+  chatID;
+  chatType;
+  isForum;
+  isTopicMessage;
+  messageThreadID;
+  constructor(update) {
+    if (update.message) {
+      this.fromUserID = update.message.from?.id;
+      this.chatID = update.message.chat.id;
+      this.chatType = update.message.chat.type;
+      this.isForum = update.message.chat.is_forum;
+      this.isTopicMessage = update.message.is_topic_message;
+      this.messageThreadID = update.message.message_thread_id;
+    } else if (update.callback_query) {
+      this.fromUserID = update.callback_query.from.id;
+      this.chatID = update.callback_query.message?.chat.id;
+      this.chatType = update.callback_query.message?.chat.type;
+      this.isForum = update.callback_query.message?.chat.is_forum;
+    } else {
+      console.error("Unknown update type");
+    }
+  }
+}
 class APIClientBase {
   token;
   baseURL = ENV.TELEGRAM_API_DOMAIN;
@@ -406,7 +514,6 @@ function createTelegramBotAPI(token) {
     }
   });
 }
-
 const INTERPOLATE_LOOP_REGEXP = /\{\{#each(?::(\w+))?\s+(\w+)\s+in\s+([\w.[\]]+)\}\}([\s\S]*?)\{\{\/each(?::\1)?\}\}/g;
 const INTERPOLATE_CONDITION_REGEXP = /\{\{#if(?::(\w+))?\s+([\w.[\]]+)\}\}([\s\S]*?)(?:\{\{#else(?::\1)?\}\}([\s\S]*?))?\{\{\/if(?::\1)?\}\}/g;
 const INTERPOLATE_VARIABLE_REGEXP = /\{\{([\w.[\]]+)\}\}/g;
@@ -432,7 +539,7 @@ function evaluateExpression(expr, localData) {
     return void 0;
   }
 }
-function interpolate(template, data, formatter = null) {
+function interpolate(template, data, formatter) {
   const processConditional = (condition, trueBlock, falseBlock, localData) => {
     const result = evaluateExpression(condition, localData);
     return result ? trueBlock : falseBlock || "";
@@ -464,7 +571,6 @@ function interpolate(template, data, formatter = null) {
   };
   return processTemplate(template, data);
 }
-
 function interpolateObject(obj, data) {
   if (obj === null || obj === void 0) {
     return null;
@@ -554,58 +660,6 @@ function formatInput(input, type) {
     return input;
   }
 }
-
-const escapeChars = /([_*[\]()\\~`>#+\-=|{}.!])/g;
-function escape(text) {
-  const lines = text.split("\n");
-  const stack = [];
-  const result = [];
-  let lineTrim = "";
-  for (const [i, line] of lines.entries()) {
-    lineTrim = line.trim();
-    let startIndex = 0;
-    if (/^```.+/.test(lineTrim)) {
-      stack.push(i);
-    } else if (lineTrim === "```") {
-      if (stack.length) {
-        startIndex = stack.pop();
-        if (!stack.length) {
-          const content = lines.slice(startIndex, i + 1).join("\n");
-          result.push(handleEscape(content, "code"));
-          continue;
-        }
-      } else {
-        stack.push(i);
-      }
-    }
-    if (!stack.length) {
-      result.push(handleEscape(line));
-    }
-  }
-  if (stack.length) {
-    const last = `${lines.slice(stack[0]).join("\n")}
-\`\`\``;
-    result.push(handleEscape(last, "code"));
-  }
-  return result.join("\n");
-}
-function handleEscape(text, type = "text") {
-  if (!text.trim()) {
-    return text;
-  }
-  if (type === "text") {
-    text = text.replace(escapeChars, "\\$1").replace(/\\\*\\\*(.*?[^\\])\\\*\\\*/g, "*$1*").replace(/\\_\\_(.*?[^\\])\\_\\_/g, "__$1__").replace(/\\_(.*?[^\\])\\_/g, "_$1_").replace(/\\~(.*?[^\\])\\~/g, "~$1~").replace(/\\\|\\\|(.*?[^\\])\\\|\\\|/g, "||$1||").replace(/\\\[([^\]]+?)\\\]\\\((.+?)\\\)/g, "[$1]($2)").replace(/\\`(.*?[^\\])\\`/g, "`$1`").replace(/\\\\\\([_*[\]()\\~`>#+\-=|{}.!])/g, "\\$1").replace(/^(\s*)\\(>.+\s*)$/gm, "$1$2").replace(/^(\s*)\\-\s*(.+)$/gm, "$1• $2").replace(/^((\\#){1,3}\s)(.+)/gm, "$1*$3*");
-  } else {
-    const codeBlank = text.length - text.trimStart().length;
-    if (codeBlank > 0) {
-      const blankReg = new RegExp(`^\\s{${codeBlank}}`, "gm");
-      text = text.replace(blankReg, "");
-    }
-    text = text.trimEnd().replace(/([\\`])/g, "\\$1").replace(/^\\`\\`\\`([\s\S]+)\\`\\`\\`$/g, "```$1```");
-  }
-  return text;
-}
-
 class MessageContext {
   chat_id;
   message_id = null;
@@ -712,8 +766,8 @@ class MessageSender {
     }
   }
   renderMessage(parse_mode, message) {
-    if (parse_mode === "MarkdownV2") {
-      return escape(message);
+    if (ENV.CUSTOM_MESSAGE_RENDER) {
+      return ENV.CUSTOM_MESSAGE_RENDER(parse_mode, message);
     }
     return message;
   }
@@ -785,7 +839,6 @@ class MessageSender {
     return this.api.sendPhoto(params);
   }
 }
-
 async function loadChatRoleWithContext(chatId, speakerId, context) {
   const { groupAdminsKey } = context.SHARE_CONTEXT;
   if (!groupAdminsKey) {
@@ -818,7 +871,6 @@ async function loadChatRoleWithContext(chatId, speakerId, context) {
   }
   return "member";
 }
-
 class Cache {
   maxItems;
   maxAge;
@@ -857,7 +909,6 @@ class Cache {
     }
   }
 }
-
 const IMAGE_CACHE = new Cache();
 async function fetchImage(url) {
   const cache = IMAGE_CACHE.get(url);
@@ -899,7 +950,6 @@ async function imageToBase64String(url) {
     format: `image/${format}`
   };
 }
-
 class Stream {
   response;
   controller;
@@ -1098,7 +1148,6 @@ class LineDecoder {
     return lines;
   }
 }
-
 function fixOpenAICompatibleOptions(options) {
   options = options || {};
   options.streamBuilder = options.streamBuilder || function(r, c) {
@@ -1197,7 +1246,6 @@ async function requestChatCompletions(url, header, body, onStream, options = nul
   }
   return options.fullContentExtractor?.(result) || "";
 }
-
 function extractTextContent(history) {
   if (typeof history.content === "string") {
     return history.content;
@@ -1255,7 +1303,6 @@ async function loadModelsList(raw, remoteLoader) {
   }
   return [];
 }
-
 class Anthropic {
   name = "anthropic";
   modelKey = "ANTHROPIC_CHAT_MODEL";
@@ -1324,7 +1371,7 @@ class Anthropic {
       "anthropic-version": "2023-06-01",
       "content-type": "application/json"
     };
-    if (messages.length > 0 && messages[0].role === "assistant") {
+    if (messages.length > 0 && messages[0].role === "system") {
       messages.shift();
     }
     const body = {
@@ -1356,7 +1403,6 @@ class Anthropic {
     return loadModelsList(context.ANTHROPIC_CHAT_MODELS_LIST);
   };
 }
-
 async function renderOpenAIMessage(item, supportImage) {
   const res = {
     role: item.role,
@@ -1373,7 +1419,13 @@ async function renderOpenAIMessage(item, supportImage) {
           if (supportImage) {
             const data = extractImageContent(content.image);
             if (data.url) {
-              contents.push({ type: "image_url", image_url: { url: data.url } });
+              if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === "base64") {
+                contents.push(await imageToBase64String(data.url).then(({ data: data2 }) => {
+                  return { type: "image_url", image_url: { url: data2 } };
+                }));
+              } else {
+                contents.push({ type: "image_url", image_url: { url: data.url } });
+              }
             } else if (data.base64) {
               contents.push({ type: "image_url", image_url: { url: data.base64 } });
             }
@@ -1475,7 +1527,6 @@ class Dalle extends OpenAIBase {
     return resp?.data?.at(0)?.url;
   };
 }
-
 class AzureBase {
   name = "azure";
   modelFromURI = (uri) => {
@@ -1552,7 +1603,6 @@ class AzureImageAI extends AzureBase {
     return resp?.data?.at(0)?.url;
   };
 }
-
 class Cohere {
   name = "cohere";
   modelKey = "COHERE_CHAT_MODEL";
@@ -1600,7 +1650,6 @@ class Cohere {
     });
   };
 }
-
 class Gemini {
   name = "gemini";
   modelKey = "GOOGLE_COMPLETIONS_MODEL";
@@ -1612,7 +1661,7 @@ class Gemini {
   };
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
-    const url = `${context.GOOGLE_API_BASE}/chat`;
+    const url = `${context.GOOGLE_API_BASE}/openai/chat/completions`;
     const header = {
       "Authorization": `Bearer ${context.GOOGLE_API_KEY}`,
       "Content-Type": "application/json",
@@ -1626,10 +1675,15 @@ class Gemini {
     return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
   };
   modelList = async (context) => {
-    return loadModelsList(context.GOOGLE_CHAT_MODELS_LIST);
+    if (context.GOOGLE_CHAT_MODELS_LIST === "") {
+      context.GOOGLE_CHAT_MODELS_LIST = `${context.GOOGLE_API_BASE}/models`;
+    }
+    return loadModelsList(context.GOOGLE_CHAT_MODELS_LIST, async (url) => {
+      const data = await fetch(`${url}?key=${context.GOOGLE_API_KEY}`).then((r) => r.json());
+      return data?.models?.filter((model) => model.supportedGenerationMethods?.includes("generateContent")).map((model) => model.name.split("/").pop()) ?? [];
+    });
   };
 }
-
 class Mistral {
   name = "mistral";
   modelKey = "MISTRAL_CHAT_MODEL";
@@ -1665,7 +1719,6 @@ class Mistral {
     });
   };
 }
-
 class WorkerBase {
   name = "workers";
   run = async (model, body, id, token) => {
@@ -1764,7 +1817,6 @@ async function base64StringToBlob(base64String) {
     return new Blob([uint8Array], { type: "image/png" });
   }
 }
-
 const CHAT_AGENTS = [
   new OpenAI(),
   new Anthropic(),
@@ -1805,52 +1857,6 @@ function loadImageGen(context) {
   }
   return null;
 }
-
-function isTelegramChatTypeGroup(type) {
-  return type === "group" || type === "supergroup";
-}
-async function setUserConfig(values, context) {
-  for (const ent of Object.entries(values || {})) {
-    let [key, value] = ent;
-    key = ENV_KEY_MAPPER[key] || key;
-    if (ENV.LOCK_USER_CONFIG_KEYS.includes(key)) {
-      throw new Error(`Key ${key} is locked`);
-    }
-    const configKeys = Object.keys(context.USER_CONFIG || {}) || [];
-    if (!configKeys.includes(key)) {
-      throw new Error(`Key ${key} is not allowed`);
-    }
-    context.USER_CONFIG.DEFINE_KEYS.push(key);
-    ConfigMerger.merge(context.USER_CONFIG, {
-      [key]: value
-    });
-    console.log("Update user config: ", key, context.USER_CONFIG[key]);
-  }
-  context.USER_CONFIG.DEFINE_KEYS = Array.from(new Set(context.USER_CONFIG.DEFINE_KEYS));
-  await ENV.DATABASE.put(
-    context.SHARE_CONTEXT.configStoreKey,
-    JSON.stringify(ConfigMerger.trim(context.USER_CONFIG, ENV.LOCK_USER_CONFIG_KEYS))
-  );
-}
-
-const TELEGRAM_AUTH_CHECKER = {
-  default(chatType) {
-    if (isTelegramChatTypeGroup(chatType)) {
-      return ["administrator", "creator"];
-    }
-    return null;
-  },
-  shareModeGroup(chatType) {
-    if (isTelegramChatTypeGroup(chatType)) {
-      if (!ENV.GROUP_CHAT_BOT_SHARE_MODE) {
-        return null;
-      }
-      return ["administrator", "creator"];
-    }
-    return null;
-  }
-};
-
 function tokensCounter() {
   return (text) => {
     return text.length;
@@ -1910,22 +1916,48 @@ async function requestCompletionsFromLLM(params, context, agent, modifier, onStr
   if (!params) {
     throw new Error("Message is empty");
   }
-  history.push(params);
   const llmParams = {
     prompt: context.USER_CONFIG.SYSTEM_INIT_MESSAGE || void 0,
-    messages: history
+    messages: [...history, params]
   };
   const { text, responses } = await agent.request(llmParams, context.USER_CONFIG, onStream);
   if (!historyDisable) {
-    if (ENV.HISTORY_IMAGE_PLACEHOLDER) ;
-    history.push(params);
-    history.push(...responses);
-    await ENV.DATABASE.put(historyKey, JSON.stringify(history)).catch(console.error);
+    const editParams = { ...params };
+    if (ENV.HISTORY_IMAGE_PLACEHOLDER) {
+      if (Array.isArray(editParams.content)) {
+        const imageCount = editParams.content.filter((i) => i.type === "image").length;
+        const textContent = editParams.content.findLast((i) => i.type === "text");
+        if (textContent) {
+          editParams.content = editParams.content.filter((i) => i.type !== "image");
+          textContent.text = textContent.text + ` ${ENV.HISTORY_IMAGE_PLACEHOLDER}`.repeat(imageCount);
+        }
+      }
+    }
+    await ENV.DATABASE.put(historyKey, JSON.stringify([...history, editParams, ...responses])).catch(console.error);
   }
   return text;
 }
-
-async function chatWithLLM(message, params, context, modifier) {
+const TELEGRAM_AUTH_CHECKER = {
+  default(chatType) {
+    if (isGroupChat(chatType)) {
+      return ["administrator", "creator"];
+    }
+    return null;
+  },
+  shareModeGroup(chatType) {
+    if (isGroupChat(chatType)) {
+      if (!ENV.GROUP_CHAT_BOT_SHARE_MODE) {
+        return null;
+      }
+      return ["administrator", "creator"];
+    }
+    return null;
+  }
+};
+function isGroupChat(type) {
+  return type === "group" || type === "supergroup";
+}
+async function chatWithMessage(message, params, context, modifier) {
   const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
   try {
     try {
@@ -1986,42 +2018,49 @@ async function chatWithLLM(message, params, context, modifier) {
     return sender.sendPlainText(errMsg);
   }
 }
-function findPhotoFileID(photos, offset) {
-  let sizeIndex = 0;
-  if (offset >= 0) {
-    sizeIndex = offset;
-  } else if (offset < 0) {
-    sizeIndex = photos.length + offset;
+async function extractImageURL(fileId, context) {
+  if (!fileId) {
+    return null;
   }
-  sizeIndex = Math.max(0, Math.min(sizeIndex, photos.length - 1));
-  return photos[sizeIndex].file_id;
-}
-class ChatHandler {
-  handle = async (message, context) => {
-    const text = message.text || message.caption || "";
-    const params = {
-      role: "user",
-      content: text
-    };
-    if (message.photo && message.photo.length > 0) {
-      const id = findPhotoFileID(message.photo, ENV.TELEGRAM_PHOTO_SIZE_OFFSET);
-      const api = createTelegramBotAPI(context.SHARE_CONTEXT.botToken);
-      const file = await api.getFileWithReturns({ file_id: id });
-      const filePath = file.result.file_path;
-      if (filePath) {
-        const url = URL.parse(`${ENV.TELEGRAM_API_DOMAIN}/file/bot${context.SHARE_CONTEXT.botToken}/${filePath}`);
-        if (url) {
-          params.content = [
-            { type: "text", text },
-            { type: "image", image: url }
-          ];
-        }
-      }
+  const api = createTelegramBotAPI(context.SHARE_CONTEXT.botToken);
+  const file = await api.getFileWithReturns({ file_id: fileId });
+  const filePath = file.result.file_path;
+  if (filePath) {
+    const url = URL.parse(`${ENV.TELEGRAM_API_DOMAIN}/file/bot${context.SHARE_CONTEXT.botToken}/${filePath}`);
+    if (url) {
+      return url;
     }
-    return chatWithLLM(message, params, context, null);
-  };
+  }
+  return null;
 }
-
+function extractImageFileID(message) {
+  if (message.photo && message.photo.length > 0) {
+    const offset = ENV.TELEGRAM_PHOTO_SIZE_OFFSET;
+    const length = message.photo.length;
+    const sizeIndex = Math.max(0, Math.min(offset >= 0 ? offset : length + offset, length - 1));
+    return message.photo[sizeIndex]?.file_id;
+  } else if (message.document && message.document.thumbnail) {
+    return message.document.thumbnail.file_id;
+  }
+  return null;
+}
+async function extractUserMessageItem(message, context) {
+  const text = message.text || message.caption || "";
+  const params = {
+    role: "user",
+    content: text
+  };
+  const url = await extractImageURL(extractImageFileID(message), context);
+  if (url) {
+    const contents = new Array();
+    if (text) {
+      contents.push({ type: "text", text });
+    }
+    contents.push({ type: "image", image: url });
+    params.content = contents;
+  }
+  return params;
+}
 class ImgCommandHandler {
   command = "/img";
   scopes = ["all_private_chats", "all_chat_administrators"];
@@ -2088,7 +2127,7 @@ class BaseNewCommandHandler {
       chat_id: message.chat.id,
       text
     };
-    if (ENV.SHOW_REPLY_BUTTON && !isTelegramChatTypeGroup(message.chat.type)) {
+    if (ENV.SHOW_REPLY_BUTTON && !isGroupChat(message.chat.type)) {
       params.reply_markup = {
         keyboard: [[{ text: "/new" }, { text: "/redo" }]],
         selective: true,
@@ -2129,7 +2168,7 @@ class SetEnvCommandHandler {
     const key = subcommand.slice(0, kv);
     const value = subcommand.slice(kv + 1);
     try {
-      await setUserConfig({ [key]: value }, context);
+      await context.execChangeAndSave({ [key]: value });
       return sender.sendPlainText("Update user config success");
     } catch (e) {
       return sender.sendPlainText(`ERROR: ${e.message}`);
@@ -2143,7 +2182,7 @@ class SetEnvsCommandHandler {
     const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
     try {
       const values = JSON.parse(subcommand);
-      await setUserConfig(values, context);
+      await context.execChangeAndSave(values);
       return sender.sendPlainText("Update user config success");
     } catch (e) {
       return sender.sendPlainText(`ERROR: ${e.message}`);
@@ -2234,16 +2273,14 @@ class SystemCommandHandler {
     if (ENV.DEV_MODE) {
       const shareCtx = { ...context.SHARE_CONTEXT };
       shareCtx.botToken = "******";
-      context.USER_CONFIG.OPENAI_API_KEY = ["******"];
+      context.USER_CONFIG.ANTHROPIC_API_KEY = "******";
       context.USER_CONFIG.AZURE_API_KEY = "******";
-      context.USER_CONFIG.AZURE_COMPLETIONS_API = "******";
-      context.USER_CONFIG.AZURE_DALLE_API = "******";
-      context.USER_CONFIG.CLOUDFLARE_ACCOUNT_ID = "******";
-      context.USER_CONFIG.CLOUDFLARE_TOKEN = "******";
+      context.USER_CONFIG.COHERE_API_KEY = "******";
       context.USER_CONFIG.GOOGLE_API_KEY = "******";
       context.USER_CONFIG.MISTRAL_API_KEY = "******";
-      context.USER_CONFIG.COHERE_API_KEY = "******";
-      context.USER_CONFIG.ANTHROPIC_API_KEY = "******";
+      context.USER_CONFIG.OPENAI_API_KEY = ["******"];
+      context.USER_CONFIG.CLOUDFLARE_ACCOUNT_ID = "******";
+      context.USER_CONFIG.CLOUDFLARE_TOKEN = "******";
       const config = ConfigMerger.trim(context.USER_CONFIG, ENV.LOCK_USER_CONFIG_KEYS);
       msg = `<pre>
 ${msg}`;
@@ -2288,7 +2325,7 @@ class RedoCommandHandler {
       }
       return { history: historyCopy, message: nextMessage };
     };
-    return chatWithLLM(message, null, context, mf);
+    return chatWithMessage(message, null, context, mf);
   };
 }
 class ModelsCommandHandler {
@@ -2321,7 +2358,6 @@ class EchoCommandHandler {
     return MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message).sendRichText(msg, "HTML");
   };
 }
-
 const SYSTEM_COMMANDS = [
   new StartCommandHandler(),
   new NewCommandHandler(),
@@ -2477,103 +2513,6 @@ function commandsDocument() {
     };
   }).filter((item) => item.description !== "");
 }
-
-class ShareContext {
-  botId;
-  botToken;
-  botName = null;
-  chatHistoryKey;
-  lastMessageKey;
-  configStoreKey;
-  groupAdminsKey;
-  constructor(token, update) {
-    const botId = Number.parseInt(token.split(":")[0]);
-    const telegramIndex = ENV.TELEGRAM_AVAILABLE_TOKENS.indexOf(token);
-    if (telegramIndex === -1) {
-      throw new Error("Token not allowed");
-    }
-    if (ENV.TELEGRAM_BOT_NAME.length > telegramIndex) {
-      this.botName = ENV.TELEGRAM_BOT_NAME[telegramIndex];
-    }
-    this.botToken = token;
-    this.botId = botId;
-    const id = update.chatID;
-    if (id === void 0 || id === null) {
-      throw new Error("Chat id not found");
-    }
-    let historyKey = `history:${id}`;
-    let configStoreKey = `user_config:${id}`;
-    if (botId) {
-      historyKey += `:${botId}`;
-      configStoreKey += `:${botId}`;
-    }
-    switch (update.chatType) {
-      case "group":
-      case "supergroup":
-        if (!ENV.GROUP_CHAT_BOT_SHARE_MODE && update.fromUserID) {
-          historyKey += `:${update.fromUserID}`;
-          configStoreKey += `:${update.fromUserID}`;
-        }
-        this.groupAdminsKey = `group_admin:${id}`;
-        break;
-    }
-    if (update.isForum && update.isTopicMessage) {
-      if (update.messageThreadID) {
-        historyKey += `:${update.messageThreadID}`;
-        configStoreKey += `:${update.messageThreadID}`;
-      }
-    }
-    this.chatHistoryKey = historyKey;
-    this.lastMessageKey = `last_message_id:${historyKey}`;
-    this.configStoreKey = configStoreKey;
-  }
-}
-class WorkerContext {
-  USER_CONFIG;
-  SHARE_CONTEXT;
-  constructor(USER_CONFIG, SHARE_CONTEXT) {
-    this.USER_CONFIG = USER_CONFIG;
-    this.SHARE_CONTEXT = SHARE_CONTEXT;
-  }
-  static async from(token, update) {
-    const context = new UpdateContext(update);
-    const SHARE_CONTEXT = new ShareContext(token, context);
-    const USER_CONFIG = Object.assign({}, ENV.USER_CONFIG);
-    try {
-      const userConfig = JSON.parse(await ENV.DATABASE.get(SHARE_CONTEXT.configStoreKey));
-      ConfigMerger.merge(USER_CONFIG, ConfigMerger.trim(userConfig, ENV.LOCK_USER_CONFIG_KEYS) || {});
-    } catch (e) {
-      console.warn(e);
-    }
-    return new WorkerContext(USER_CONFIG, SHARE_CONTEXT);
-  }
-}
-class UpdateContext {
-  fromUserID;
-  chatID;
-  chatType;
-  isForum;
-  isTopicMessage;
-  messageThreadID;
-  constructor(update) {
-    if (update.message) {
-      this.fromUserID = update.message.from?.id;
-      this.chatID = update.message.chat.id;
-      this.chatType = update.message.chat.type;
-      this.isForum = update.message.chat.is_forum;
-      this.isTopicMessage = update.message.is_topic_message;
-      this.messageThreadID = update.message.message_thread_id;
-    } else if (update.callback_query) {
-      this.fromUserID = update.callback_query.from.id;
-      this.chatID = update.callback_query.message?.chat.id;
-      this.chatType = update.callback_query.message?.chat.type;
-      this.isForum = update.callback_query.message?.chat.is_forum;
-    } else {
-      console.error("Unknown update type");
-    }
-  }
-}
-
 function checkMention(content, entities, botName, botId) {
   let isMention = false;
   for (const entity of entities) {
@@ -2607,7 +2546,7 @@ function checkMention(content, entities, botName, botId) {
 }
 class GroupMention {
   handle = async (message, context) => {
-    if (!isTelegramChatTypeGroup(message.chat.type)) {
+    if (!isGroupChat(message.chat.type)) {
       return null;
     }
     const replyMe = `${message.reply_to_message?.from?.id}` === `${context.SHARE_CONTEXT.botId}`;
@@ -2646,7 +2585,6 @@ ${message.text}`;
     return null;
   };
 }
-
 class AgentListCallbackQueryHandler {
   prefix = "al:";
   needAuth = TELEGRAM_AUTH_CHECKER.shareModeGroup;
@@ -2775,10 +2713,11 @@ class ModelChangeCallbackQueryHandler {
     if (!chatAgent?.modelKey) {
       throw new Error(`modelKey not found: ${agent}`);
     }
-    await setUserConfig({
+    await context.execChangeAndSave({
       AI_PROVIDER: agent,
       [chatAgent.modelKey]: model
-    }, context);
+    });
+    console.log("Change model:", agent, model);
     const message = {
       chat_id: query.message.chat.id,
       message_id: query.message.message_id,
@@ -2787,7 +2726,6 @@ class ModelChangeCallbackQueryHandler {
     return sender.editRawMessage(message);
   }
 }
-
 const QUERY_HANDLERS = [
   new AgentListCallbackQueryHandler(),
   new ModelListCallbackQueryHandler(),
@@ -2828,11 +2766,11 @@ async function handleCallbackQuery(callbackQuery, context) {
       }
     }
   } catch (e) {
+    console.error("handleCallbackQuery", e);
     return answerCallbackQuery(`ERROR: ${e.message}`);
   }
   return null;
 }
-
 class EnvChecker {
   handle = async (update, context) => {
     if (!ENV.DATABASE) {
@@ -2866,7 +2804,7 @@ class WhiteListFilter {
       }
       return null;
     }
-    if (isTelegramChatTypeGroup(chatType)) {
+    if (isGroupChat(chatType)) {
       if (!ENV.GROUP_CHAT_BOT_ENABLE) {
         throw new Error("Not support");
       }
@@ -2972,7 +2910,12 @@ class CommandHandler {
     return null;
   };
 }
-
+class ChatHandler {
+  handle = async (message, context) => {
+    const params = await extractUserMessageItem(message, context);
+    return chatWithMessage(message, params, context, null);
+  };
+}
 const SHARE_HANDLER = [
   new EnvChecker(),
   new WhiteListFilter(),
@@ -3003,7 +2946,6 @@ async function handleUpdate(token, update) {
   }
   return null;
 }
-
 function renderHTML(body) {
   return `
 <html lang="en">  
@@ -3073,7 +3015,6 @@ function makeResponse200(resp) {
     });
   }
 }
-
 class Router {
   routes;
   base;
@@ -3160,7 +3101,6 @@ class Router {
     return this.route("ALL", path, ...handlers);
   }
 }
-
 const helpLink = "https://github.com/TBXark/ChatGPT-Telegram-Workers/blob/master/doc/en/DEPLOY.md";
 const issueLink = "https://github.com/TBXark/ChatGPT-Telegram-Workers/issues";
 const initLink = "./init";
@@ -3252,8 +3192,7 @@ function createRouter() {
   router.all("*", () => new Response("Not Found", { status: 404 }));
   return router;
 }
-
-const index = {
+const Workers = {
   async fetch(request, env) {
     try {
       ENV.merge(env);
@@ -3268,4 +3207,5 @@ const index = {
   }
 };
 
-export { index as default };
+export { Workers as default };
+//# sourceMappingURL=index.js.map

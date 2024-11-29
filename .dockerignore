@@ -1,0 +1,16 @@
+.git
+.env
+.DS_Store
+.github
+.vercel
+.wrangler
+dist
+doc
+node_modules
+plugins
+scripts
+wrangler.toml
+config.json
+packages/**/dist
+packages/**/node_modules
+packages/**/tsconfig.tsbuildinfo

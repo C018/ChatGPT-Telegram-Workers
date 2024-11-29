@@ -16,7 +16,7 @@ ChatGPT-Telegram-Workers
 
 <details>
 <summary>查看Demo</summary>
-<img style="max-width: 600px;" alt="image" src="doc/demo.jpg">
+<img style="max-width: 600px;" alt="image" src="doc/demo.png">
 </details>
 
 
@@ -25,12 +25,13 @@ ChatGPT-Telegram-Workers
 - 无服务器部署
 - 多平台部署支持(Cloudflare Workers, Vercel, Docker[...](doc/cn/PLATFORM.md))
 - 适配多种AI服务商(OpenAI, Azure OpenAI, Cloudflare AI, Cohere, Anthropic, Mistral...)
+- 使用 InlineKeyboards 切换模型
 - 自定义指令(可以实现快速切换模型,切换机器人预设)
 - 支持多个Telegram机器人
 - 流式输出
 - 多语言支持
 - 文字生成图片
-- [插件系统](plugins),可以自定义插件
+- [插件系统](doc/cn/PLUGINS.md),可以自定义插件
 
 
 ## 文档

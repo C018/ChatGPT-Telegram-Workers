@@ -1,16 +1,16 @@
-FROM node:alpine as DEV
-
+FROM node:alpine AS build
 WORKDIR /app
-COPY package.json vite.config.ts tsconfig.json ./
-COPY src ./src
-RUN npm install && npm run build:local
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN npm install -g pnpm
+COPY . .
+RUN pnpm install
+RUN pnpm run build:local
 
-FROM node:alpine as PROD
 
+FROM node:alpine AS production
 WORKDIR /app
-COPY --from=DEV /app/dist/index.js /app/dist/index.js
-COPY --from=DEV /app/package.json /app/
-RUN npm install --only=production --omit=dev
-RUN apk add --no-cache sqlite
+COPY packages/apps/local/package.docker.json package.json
+RUN npm install
+COPY --from=build /app/packages/apps/local/dist/index.js index.js
 EXPOSE 8787
-CMD ["npm", "run", "start:dist"]
+CMD ["npm", "run", "start"]

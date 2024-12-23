@@ -7,7 +7,7 @@ class EnvironmentConfig {
   DEFAULT_PARSE_MODE = "Markdown";
   TELEGRAM_MIN_STREAM_INTERVAL = 0;
   TELEGRAM_PHOTO_SIZE_OFFSET = 1;
-  TELEGRAM_IMAGE_TRANSFER_MODE = "url";
+  TELEGRAM_IMAGE_TRANSFER_MODE = "base64";
   MODEL_LIST_COLUMNS = 1;
   I_AM_A_GENEROUS_PERSON = false;
   CHAT_WHITE_LIST = [];
@@ -31,6 +31,7 @@ class EnvironmentConfig {
   HIDE_COMMAND_BUTTONS = [];
   SHOW_REPLY_BUTTON = false;
   EXTRA_MESSAGE_CONTEXT = false;
+  EXTRA_MESSAGE_MEDIA_COMPATIBLE = ["image"];
   STREAM_MODE = true;
   SAFE_MODE = true;
   DEBUG_MODE = false;
@@ -192,8 +193,8 @@ class ConfigMerger {
     }
   }
 }
-const BUILD_TIMESTAMP = 1732966958;
-const BUILD_VERSION = "239539c";
+const BUILD_TIMESTAMP = 1734333416;
+const BUILD_VERSION = "36b3dfe";
 function createAgentUserConfig() {
   return Object.assign(
     {},
@@ -597,12 +598,6 @@ class GroupMention {
     if (!isMention) {
       throw new Error("Not mention");
     }
-    if (ENV.EXTRA_MESSAGE_CONTEXT && !replyMe && message.reply_to_message && message.reply_to_message.text) {
-      if (message.text) {
-        message.text = `${message.reply_to_message.text}
-${message.text}`;
-      }
-    }
     return null;
   };
 }
@@ -880,8 +875,6 @@ function getImageFormatFromBase64(base64String) {
       return "jpeg";
     case "i":
       return "png";
-    case "R":
-      return "gif";
     case "U":
       return "webp";
     default:
@@ -895,6 +888,9 @@ async function imageToBase64String(url) {
     data: base64String,
     format: `image/${format}`
   };
+}
+function renderBase64DataURI(params) {
+  return `data:${params.format};base64,${params.data}`;
 }
 class Stream {
   response;
@@ -1349,6 +1345,11 @@ class Anthropic {
     return loadModelsList(context.ANTHROPIC_CHAT_MODELS_LIST);
   };
 }
+var ImageSupportFormat =  ((ImageSupportFormat2) => {
+  ImageSupportFormat2["URL"] = "url";
+  ImageSupportFormat2["BASE64"] = "base64";
+  return ImageSupportFormat2;
+})(ImageSupportFormat || {});
 async function renderOpenAIMessage(item, supportImage) {
   const res = {
     role: item.role,
@@ -1363,17 +1364,19 @@ async function renderOpenAIMessage(item, supportImage) {
           break;
         case "image":
           if (supportImage) {
+            const isSupportURL = supportImage.includes("url" );
+            const isSupportBase64 = supportImage.includes("base64" );
             const data = extractImageContent(content.image);
             if (data.url) {
-              if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === "base64") {
-                contents.push(await imageToBase64String(data.url).then(({ data: data2 }) => {
-                  return { type: "image_url", image_url: { url: data2 } };
+              if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === "base64" && isSupportBase64) {
+                contents.push(await imageToBase64String(data.url).then((data2) => {
+                  return { type: "image_url", image_url: { url: renderBase64DataURI(data2) } };
                 }));
-              } else {
+              } else if (isSupportURL) {
                 contents.push({ type: "image_url", image_url: { url: data.url } });
               }
-            } else if (data.base64) {
-              contents.push({ type: "image_url", image_url: { url: data.base64 } });
+            } else if (data.base64 && isSupportBase64) {
+              contents.push({ type: "image_base64", image_base64: { base64: data.base64 } });
             }
           }
           break;
@@ -1408,9 +1411,6 @@ class OpenAI extends OpenAIBase {
   model = (ctx) => {
     return ctx.OPENAI_CHAT_MODEL;
   };
-  render = async (item) => {
-    return renderOpenAIMessage(item);
-  };
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
     const url = `${context.OPENAI_API_BASE}/chat/completions`;
@@ -1421,7 +1421,7 @@ class OpenAI extends OpenAIBase {
     const body = {
       model: context.OPENAI_CHAT_MODEL,
       ...context.OPENAI_API_EXTRA_PARAMS,
-      messages: await renderOpenAIMessages(prompt, messages, true),
+      messages: await renderOpenAIMessages(prompt, messages, ["url" , "base64" ]),
       stream: onStream != null
     };
     return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
@@ -1504,7 +1504,7 @@ class AzureChatAI extends AzureBase {
     };
     const body = {
       ...context.OPENAI_API_EXTRA_PARAMS,
-      messages: await renderOpenAIMessages(prompt, messages, true),
+      messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.URL, ImageSupportFormat.BASE64]),
       stream: onStream != null
     };
     return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
@@ -1567,7 +1567,7 @@ class Cohere {
       "Accept": onStream !== null ? "text/event-stream" : "application/json"
     };
     const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
+      messages: await renderOpenAIMessages(prompt, messages, null),
       model: context.COHERE_CHAT_MODEL,
       stream: onStream != null
     };
@@ -1614,7 +1614,7 @@ class Gemini {
       "Accept": onStream !== null ? "text/event-stream" : "application/json"
     };
     const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
+      messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.BASE64]),
       model: context.GOOGLE_COMPLETIONS_MODEL,
       stream: onStream != null
     };
@@ -1648,7 +1648,7 @@ class Mistral {
     };
     const body = {
       model: context.MISTRAL_CHAT_MODEL,
-      messages: await renderOpenAIMessages(prompt, messages),
+      messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.URL]),
       stream: onStream != null
     };
     return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
@@ -1702,7 +1702,7 @@ class WorkersChat extends WorkerBase {
       Authorization: `Bearer ${token}`
     };
     const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
+      messages: await renderOpenAIMessages(prompt, messages, null),
       stream: onStream !== null
     };
     const options = {};
@@ -2157,18 +2157,30 @@ function extractImageFileID(message) {
   return null;
 }
 async function extractUserMessageItem(message, context) {
-  const text = message.text || message.caption || "";
+  let text = message.text || message.caption || "";
+  const urls = await extractImageURL(extractImageFileID(message), context).then((u) => u ? [u] : []);
+  if (ENV.EXTRA_MESSAGE_CONTEXT && message.reply_to_message && message.reply_to_message.from && `${message.reply_to_message.from.id}` !== `${context.SHARE_CONTEXT.botId}`) {
+    text = `${text}
+The following is the referenced context: ${message.reply_to_message.text || message.reply_to_message.caption || ""}`;
+    if (ENV.EXTRA_MESSAGE_MEDIA_COMPATIBLE.includes("image") && message.reply_to_message.photo) {
+      const url = await extractImageURL(extractImageFileID(message.reply_to_message), context);
+      if (url) {
+        urls.push(url);
+      }
+    }
+  }
   const params = {
     role: "user",
     content: text
   };
-  const url = await extractImageURL(extractImageFileID(message), context);
-  if (url) {
+  if (urls.length > 0) {
     const contents = new Array();
     if (text) {
       contents.push({ type: "text", text });
     }
-    contents.push({ type: "image", image: url });
+    for (const url of urls) {
+      contents.push({ type: "image", image: url });
+    }
     params.content = contents;
   }
   return params;
@@ -2323,9 +2335,9 @@ function formatInput(input, type) {
   if (type === "json") {
     return JSON.parse(input);
   } else if (type === "space-separated") {
-    return input.split(/\s+/);
+    return input.trim().split(" ").filter(Boolean);
   } else if (type === "comma-separated") {
-    return input.split(/\s*,\s*/);
+    return input.split(",").map((item) => item.trim()).filter(Boolean);
   } else {
     return input;
   }
@@ -3055,7 +3067,7 @@ class Router {
     return path.replace(/\/+(\/|$)/g, "$1");
   }
   createRouteRegex(path) {
-    return new RegExp(`^${path.replace(/(\/?\.?):(\w+)\+/g, "($1(?<$2>*))").replace(/(\/?\.?):(\w+)/g, "($1(?<$2>[^$1/]+?))").replace(/\./g, "\\.").replace(/(\/?)\*/g, "($1.*)?")}/*$`);
+    return new RegExp(`^${path.replace(/\\/g, "\\\\").replace(/(\/?\.?):(\w+)\+/g, "($1(?<$2>*))").replace(/(\/?\.?):(\w+)/g, "($1(?<$2>[^$1/]+?))").replace(/\./g, "\\.").replace(/(\/?)\*/g, "($1.*)?")}/*$`);
   }
   async fetch(request, ...args) {
     try {

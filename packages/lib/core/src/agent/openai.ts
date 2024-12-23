@@ -8,11 +8,17 @@ import type {
     LLMChatParams,
 } from './types';
 import { ENV } from '#/config';
-import { imageToBase64String } from '#/utils/image';
+import { imageToBase64String, renderBase64DataURI } from '#/utils/image';
 import { requestChatCompletions } from './request';
 import { convertStringToResponseMessages, extractImageContent, loadModelsList } from './utils';
 
-async function renderOpenAIMessage(item: HistoryItem, supportImage?: boolean): Promise<any> {
+export enum ImageSupportFormat {
+    URL = 'url',
+    BASE64 = 'base64',
+}
+
+async function
+renderOpenAIMessage(item: HistoryItem, supportImage?: ImageSupportFormat[] | null): Promise<any> {
     const res: any = {
         role: item.role,
         content: item.content,
@@ -26,17 +32,19 @@ async function renderOpenAIMessage(item: HistoryItem, supportImage?: boolean): P
                     break;
                 case 'image':
                     if (supportImage) {
+                        const isSupportURL = supportImage.includes(ImageSupportFormat.URL);
+                        const isSupportBase64 = supportImage.includes(ImageSupportFormat.BASE64);
                         const data = extractImageContent(content.image);
                         if (data.url) {
-                            if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === 'base64') {
-                                contents.push(await imageToBase64String(data.url).then(({ data }) => {
-                                    return { type: 'image_url', image_url: { url: data } };
+                            if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === 'base64' && isSupportBase64) {
+                                contents.push(await imageToBase64String(data.url).then((data) => {
+                                    return { type: 'image_url', image_url: { url: renderBase64DataURI(data) } };
                                 }));
-                            } else {
+                            } else if (isSupportURL) {
                                 contents.push({ type: 'image_url', image_url: { url: data.url } });
                             }
-                        } else if (data.base64) {
-                            contents.push({ type: 'image_url', image_url: { url: data.base64 } });
+                        } else if (data.base64 && isSupportBase64) {
+                            contents.push({ type: 'image_base64', image_base64: { base64: data.base64 } });
                         }
                     }
                     break;
@@ -49,7 +57,7 @@ async function renderOpenAIMessage(item: HistoryItem, supportImage?: boolean): P
     return res;
 }
 
-export async function renderOpenAIMessages(prompt: string | undefined, items: HistoryItem[], supportImage?: boolean): Promise<any[]> {
+export async function renderOpenAIMessages(prompt: string | undefined, items: HistoryItem[], supportImage?: ImageSupportFormat[] | null): Promise<any[]> {
     const messages = await Promise.all(items.map(r => renderOpenAIMessage(r, supportImage)));
     if (prompt) {
         if (messages.length > 0 && messages[0].role === 'system') {
@@ -79,10 +87,6 @@ export class OpenAI extends OpenAIBase implements ChatAgent {
         return ctx.OPENAI_CHAT_MODEL;
     };
 
-    private render = async (item: HistoryItem): Promise<any> => {
-        return renderOpenAIMessage(item);
-    };
-
     readonly request = async (params: LLMChatParams, context: AgentUserConfig, onStream: ChatStreamTextHandler | null): Promise<ChatAgentResponse> => {
         const { prompt, messages } = params;
         const url = `${context.OPENAI_API_BASE}/chat/completions`;
@@ -93,7 +97,7 @@ export class OpenAI extends OpenAIBase implements ChatAgent {
         const body = {
             model: context.OPENAI_CHAT_MODEL,
             ...context.OPENAI_API_EXTRA_PARAMS,
-            messages: await renderOpenAIMessages(prompt, messages, true),
+            messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.URL, ImageSupportFormat.BASE64]),
             stream: onStream != null,
         };
 

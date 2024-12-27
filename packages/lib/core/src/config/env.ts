@@ -1,4 +1,5 @@
-import type { APIGuard, CommandConfig, KVNamespace } from './types';
+import type { APIGuardBinding, KVNamespaceBinding, WorkerAIBinding } from './binding';
+import type { AgentUserConfig, AgentUserConfigKey } from './config';
 import loadI18n from '../i18n';
 import {
     AgentShareConfig,
@@ -16,17 +17,11 @@ import {
 import { ConfigMerger } from './merger';
 import { BUILD_TIMESTAMP, BUILD_VERSION } from './version';
 
-export type AgentUserConfig = Record<string, any> &
-    DefineKeys &
-    AgentShareConfig &
-    OpenAIConfig &
-    DallEConfig &
-    AzureConfig &
-    WorkersConfig &
-    GeminiConfig &
-    MistralConfig &
-    CohereConfig &
-    AnthropicConfig;
+export interface CommandConfig {
+    value: string;
+    description?: string | null;
+    scope?: string[] | null;
+}
 
 function createAgentUserConfig(): AgentUserConfig {
     return Object.assign(
@@ -44,7 +39,7 @@ function createAgentUserConfig(): AgentUserConfig {
     );
 }
 
-export const ENV_KEY_MAPPER: Record<string, string> = {
+export const ENV_KEY_MAPPER: Record<string, AgentUserConfigKey> = {
     CHAT_MODEL: 'OPENAI_CHAT_MODEL',
     API_KEY: 'OPENAI_API_KEY',
     WORKERS_AI_MODEL: 'WORKERS_CHAT_MODEL',
@@ -67,8 +62,10 @@ class Environment extends EnvironmentConfig {
     readonly CUSTOM_COMMAND: Record<string, CommandConfig> = {};
     readonly PLUGINS_COMMAND: Record<string, CommandConfig> = {};
 
-    DATABASE: KVNamespace = null as any;
-    API_GUARD: APIGuard | null = null;
+    AI_BINDING: WorkerAIBinding | null = null;
+    API_GUARD: APIGuardBinding | null = null;
+
+    DATABASE: KVNamespaceBinding = null as any;
 
     CUSTOM_MESSAGE_RENDER: CustomMessageRender | null = null;
 
@@ -79,6 +76,7 @@ class Environment extends EnvironmentConfig {
 
     merge(source: any) {
         // 全局对象
+        this.AI_BINDING = source.AI;
         this.DATABASE = source.DATABASE;
         this.API_GUARD = source.API_GUARD;
 
@@ -186,14 +184,14 @@ class Environment extends EnvironmentConfig {
         if (source.AZURE_COMPLETIONS_API && !this.USER_CONFIG.AZURE_CHAT_MODEL) {
             const url = new URL(source.AZURE_COMPLETIONS_API);
             this.USER_CONFIG.AZURE_RESOURCE_NAME = url.hostname.split('.').at(0) || null;
-            this.USER_CONFIG.AZURE_CHAT_MODEL = url.pathname.split('/').at(3) || null;
+            this.USER_CONFIG.AZURE_CHAT_MODEL = url.pathname.split('/').at(3) || 'gpt-4o-mini';
             this.USER_CONFIG.AZURE_API_VERSION = url.searchParams.get('api-version') || '2024-06-01';
         }
         // 兼容旧版 AZURE_DALLE_API
         if (source.AZURE_DALLE_API && !this.USER_CONFIG.AZURE_IMAGE_MODEL) {
             const url = new URL(source.AZURE_DALLE_API);
             this.USER_CONFIG.AZURE_RESOURCE_NAME = url.hostname.split('.').at(0) || null;
-            this.USER_CONFIG.AZURE_IMAGE_MODEL = url.pathname.split('/').at(3) || null;
+            this.USER_CONFIG.AZURE_IMAGE_MODEL = url.pathname.split('/').at(3) || 'dall-e-3';
             this.USER_CONFIG.AZURE_API_VERSION = url.searchParams.get('api-version') || '2024-06-01';
         }
     }

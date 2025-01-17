@@ -1,5 +1,5 @@
 {
-    "name": "@chatgpt-telegram-workers/workers-next",
+    "name": "@chatgpt-telegram-workers/workers-mk2",
     "type": "module",
     "version": "1.10.3",
     "main": "./dist/index.js",
@@ -11,9 +11,6 @@
     },
     "dependencies": {
         "@chatgpt-telegram-workers/core": "workspace:*",
-        "@chatgpt-telegram-workers/next": "workspace:*"
-    },
-    "devDependencies": {
-        "@types/react": "^19.0.7"
+        "telegramify-markdown": "^1.2.2"
     }
 }

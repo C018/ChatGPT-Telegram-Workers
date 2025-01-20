@@ -3,6 +3,7 @@ import * as process from 'node:process';
 import { CHAT_AGENTS, createRouter, ENV } from '@chatgpt-telegram-workers/core';
 import { injectNextChatAgent } from '@chatgpt-telegram-workers/next';
 import { UpStashRedis } from 'cloudflare-worker-adapter';
+import convert from 'telegramify-markdown';
 
 export default async function (request: VercelRequest, response: VercelResponse) {
     try {
@@ -21,10 +22,17 @@ export default async function (request: VercelRequest, response: VercelResponse)
             }
         }
         const cache = UpStashRedis.create(UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN);
+        ENV.DEFAULT_PARSE_MODE = 'MarkdownV2';
         ENV.merge({
             ...process.env,
             DATABASE: cache,
         });
+        ENV.CUSTOM_MESSAGE_RENDER = (parse_mode, message) => {
+            if (parse_mode === 'MarkdownV2') {
+                return convert(message, 'remove');
+            }
+            return message;
+        };
         injectNextChatAgent(CHAT_AGENTS); // remove this line if you don't use vercel ai sdk
         const router = createRouter();
         let body: any | null = null;

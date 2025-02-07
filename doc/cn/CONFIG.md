@@ -143,13 +143,14 @@ OPENAI_API_BASE,GOOGLE_COMPLETIONS_API,MISTRAL_API_BASE,COHERE_API_BASE,ANTHROPI
 
 > cloudflare workers 暂时不支持访问
 
-| KEY                        | 名称                               | 默认值                                                        |
-|----------------------------|----------------------------------|------------------------------------------------------------|
-| GOOGLE_API_KEY             | Google Gemini API Key            | `null`                                                     |
-| ~~GOOGLE_COMPLETIONS_API~~ | ~~Google Gemini API~~            | `https://generativelanguage.googleapis.com/v1beta/models/` |
-| GOOGLE_COMPLETIONS_MODEL   | Google Gemini Model              | `gemini-pro`                                               |
-| GOOGLE_API_BASE            | 支持Openai API 格式的 Gemini API Base | `https://generativelanguage.googleapis.com/v1beta`         |
-| GOOGLE_CHAT_MODELS_LIST    | 谷歌聊天模型列表                         | `''`                                                       |
+| KEY                          | 名称                               | 默认值                                                        |
+|------------------------------|----------------------------------|------------------------------------------------------------|
+| GOOGLE_API_KEY               | Google Gemini API Key            | `null`                                                     |
+| ~~GOOGLE_COMPLETIONS_API~~   | ~~Google Gemini API~~            | `https://generativelanguage.googleapis.com/v1beta/models/` |
+| ~~GOOGLE_COMPLETIONS_MODEL~~ | ~~Google Gemini Model~~          | `gemini-pro`                                               |
+| GOOGLE_CHAT_MODEL            | Google Gemini Model              | `gemini-pro`                                               |
+| GOOGLE_API_BASE              | 支持Openai API 格式的 Gemini API Base | `https://generativelanguage.googleapis.com/v1beta`         |
+| GOOGLE_CHAT_MODELS_LIST      | 谷歌聊天模型列表                         | `''`                                                       |
 
 ### Mistral
 
@@ -177,6 +178,24 @@ OPENAI_API_BASE,GOOGLE_COMPLETIONS_API,MISTRAL_API_BASE,COHERE_API_BASE,ANTHROPI
 | ANTHROPIC_API_BASE         | Anthropic API Base  | `https://api.anthropic.com/v1` |
 | ANTHROPIC_CHAT_MODEL       | Anthropic API Model | `claude-3-haiku-20240307`      |
 | ANTHROPIC_CHAT_MODELS_LIST | Anthropic聊天模型列表     | `''`                           |
+
+### Gorq
+
+| KEY                   | 名称             | 默认值                              |
+|-----------------------|----------------|----------------------------------|
+| GORQ_API_KEY          | Gorq API Key   | `null`                           |
+| GORQ_API_BASE         | Gorq API Base  | `https://api.groq.com/openai/v1` |
+| GORQ_CHAT_MODEL       | Gorq API Model | `gorq-chat`                      |
+| GORQ_CHAT_MODELS_LIST | Gorq聊天模型列表     | `''`                             |
+
+### DeepSeek
+
+| KEY                       | 名称                 | 默认值                        |
+|---------------------------|--------------------|----------------------------|
+| DEEPSEEK_API_KEY          | DeepSeek API Key   | `null`                     |
+| DEEPSEEK_API_BASE         | DeepSeek API Base  | `https://api.deepseek.com` |
+| DEEPSEEK_CHAT_MODEL       | DeepSeek API Model | `deepseek-chat`            |
+| DEEPSEEK_CHAT_MODELS_LIST | DeepSeek           | `''`                       |
 
 ## 支持命令
 

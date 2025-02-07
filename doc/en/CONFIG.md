@@ -143,13 +143,14 @@ All `xxx_MODELS_LIST` can be a URL or a JSON array string. When it is empty, it 
 
 > Cloudflare Workers currently do not support accessing Gemini.
 
-| KEY                        | Name                                          | Default                                                    | 
-|----------------------------|-----------------------------------------------|------------------------------------------------------------|
-| GOOGLE_API_KEY             | Google Gemini API Key                         | `null`                                                     |
-| ~~GOOGLE_COMPLETIONS_API~~ | ~~Google Gemini API~~                         | `https://generativelanguage.googleapis.com/v1beta/models/` |
-| GOOGLE_COMPLETIONS_MODEL   | Google Gemini Model                           | `gemini-pro`                                               |
-| GOOGLE_API_BASE            | Supports Gemini API Base in OpenAI API format | `https://generativelanguage.googleapis.com/v1beta`         |
-| GOOGLE_CHAT_MODELS_LIST    | List of Google Chat Models                    | `''`                                                       |
+| KEY                          | Name                                          | Default                                                    | 
+|------------------------------|-----------------------------------------------|------------------------------------------------------------|
+| GOOGLE_API_KEY               | Google Gemini API Key                         | `null`                                                     |
+| ~~GOOGLE_COMPLETIONS_API~~   | ~~Google Gemini API~~                         | `https://generativelanguage.googleapis.com/v1beta/models/` |
+| ~~GOOGLE_COMPLETIONS_MODEL~~ | ~~Google Gemini Model~~                       | `gemini-pro`                                               |
+| GOOGLE_CHAT_MODEL            | Google Gemini Model                           | `gemini-pro`                                               |
+| GOOGLE_API_BASE              | Supports Gemini API Base in OpenAI API format | `https://generativelanguage.googleapis.com/v1beta`         |
+| GOOGLE_CHAT_MODELS_LIST      | List of Google Chat Models                    | `''`                                                       |
 
 ### Mistral
 
@@ -177,6 +178,24 @@ All `xxx_MODELS_LIST` can be a URL or a JSON array string. When it is empty, it 
 | ANTHROPIC_API_BASE         | Anthropic API Base            | `https://api.anthropic.com/v1` |
 | ANTHROPIC_CHAT_MODEL       | Anthropic API Model           | `null`                         |
 | ANTHROPIC_CHAT_MODELS_LIST | List of Anthropic Chat Models | `''`                           |
+
+### Gorq
+
+| KEY                   | Name                     | Default                          | 
+|-----------------------|--------------------------|----------------------------------|
+| GORQ_API_KEY          | Gorq API Key             | `null`                           |
+| GORQ_API_BASE         | Gorq API Base            | `https://api.groq.com/openai/v1` |
+| GORQ_CHAT_MODEL       | Gorq API Model           | `gorq-chat`                      |
+| GORQ_CHAT_MODELS_LIST | List of Gorq Chat Models | `''`                             |
+
+### DeepSeek
+
+| KEY                       | Name                         | Default                    | 
+|---------------------------|------------------------------|----------------------------|
+| DEEPSEEK_API_KEY          | DeepSeek API Key             | `null`                     |
+| DEEPSEEK_API_BASE         | DeepSeek API Base            | `https://api.deepseek.com` |
+| DEEPSEEK_CHAT_MODEL       | DeepSeek API Model           | `deepseek-chat`            |
+| DEEPSEEK_CHAT_MODELS_LIST | List of DeepSeek Chat Models | `''`                       |
 
 ## Command
 

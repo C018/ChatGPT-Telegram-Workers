@@ -2,27 +2,40 @@ import type { AgentUserConfig } from '#/config';
 import type { SseChatCompatibleOptions } from './request';
 import type { SSEMessage, SSEParserResult } from './stream';
 import type {
+    AgentEnable,
+    AgentModel,
+    AgentModelList,
     ChatAgent,
+    ChatAgentRequest,
     ChatAgentResponse,
     ChatStreamTextHandler,
     HistoryItem,
     LLMChatParams,
 } from './types';
+import { loadOpenAIModelList } from '#/agent/openai_compatibility';
 import { ENV } from '#/config';
 import { imageToBase64String } from '#/utils/image';
 import { requestChatCompletions } from './request';
 import { Stream } from './stream';
-import { convertStringToResponseMessages, extractImageContent, loadModelsList } from './utils';
+import { convertStringToResponseMessages, extractImageContent, getAgentUserConfigFieldName } from './utils';
+
+function anthropicHeader(context: AgentUserConfig): Record<string, string> {
+    return {
+        'x-api-key': context.ANTHROPIC_API_KEY || '',
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+    };
+}
 
 export class Anthropic implements ChatAgent {
     readonly name = 'anthropic';
-    readonly modelKey = 'ANTHROPIC_CHAT_MODEL';
+    readonly modelKey = getAgentUserConfigFieldName('ANTHROPIC_CHAT_MODEL');
 
-    readonly enable = (context: AgentUserConfig): boolean => {
-        return !!(context.ANTHROPIC_API_KEY);
-    };
+    readonly enable: AgentEnable = ctx => !!(ctx.ANTHROPIC_API_KEY);
+    readonly model: AgentModel = ctx => ctx.ANTHROPIC_CHAT_MODEL;
+    readonly modelList: AgentModelList = ctx => loadOpenAIModelList(ctx.ANTHROPIC_CHAT_MODELS_LIST, ctx.ANTHROPIC_API_BASE, anthropicHeader(ctx));
 
-    private render = async (item: HistoryItem): Promise<any> => {
+    private static render = async (item: HistoryItem): Promise<any> => {
         const res: Record<string, any> = {
             role: item.role,
             content: item.content,
@@ -57,10 +70,6 @@ export class Anthropic implements ChatAgent {
         return res;
     };
 
-    readonly model = (ctx: AgentUserConfig): string | null => {
-        return ctx.ANTHROPIC_CHAT_MODEL;
-    };
-
     private static parser(sse: SSEMessage): SSEParserResult {
         // example:
         //      event: content_block_delta
@@ -86,23 +95,20 @@ export class Anthropic implements ChatAgent {
         }
     }
 
-    readonly request = async (params: LLMChatParams, context: AgentUserConfig, onStream: ChatStreamTextHandler | null): Promise<ChatAgentResponse> => {
+    readonly request: ChatAgentRequest = async (params: LLMChatParams, context: AgentUserConfig, onStream: ChatStreamTextHandler | null): Promise<ChatAgentResponse> => {
         const { prompt, messages } = params;
         const url = `${context.ANTHROPIC_API_BASE}/messages`;
-        const header = {
-            'x-api-key': context.ANTHROPIC_API_KEY || '',
-            'anthropic-version': '2023-06-01',
-            'content-type': 'application/json',
-        };
+        const header = anthropicHeader(context);
 
         if (messages.length > 0 && messages[0].role === 'system') {
             messages.shift();
         }
 
         const body = {
+            ...(context.ANTHROPIC_CHAT_EXTRA_PARAMS || {}),
             system: prompt,
             model: context.ANTHROPIC_CHAT_MODEL,
-            messages: (await Promise.all(messages.map(item => this.render(item)))).filter(i => i !== null),
+            messages: (await Promise.all(messages.map(item => Anthropic.render(item)))).filter(i => i !== null),
             stream: onStream != null,
             max_tokens: ENV.MAX_TOKEN_LENGTH > 0 ? ENV.MAX_TOKEN_LENGTH : 2048,
         };
@@ -123,9 +129,5 @@ export class Anthropic implements ChatAgent {
             return data?.error?.message;
         };
         return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, options));
-    };
-
-    readonly modelList = async (context: AgentUserConfig): Promise<string[]> => {
-        return loadModelsList(context.ANTHROPIC_CHAT_MODELS_LIST);
     };
 }

@@ -1,5 +1,5 @@
 import type { HistoryItem, HistoryModifierResult, UserMessageItem } from '#/agent';
-import type { WorkerContext } from '#/config';
+import type { AgentUserConfigKey, WorkerContext } from '#/config';
 import type * as Telegram from 'telegram-bot-api-types';
 import type { CommandHandler } from './types';
 import { loadChatLLM, loadImageGen } from '#/agent';
@@ -15,7 +15,21 @@ export class ImgCommandHandler implements CommandHandler {
     handle = async (message: Telegram.Message, subcommand: string, context: WorkerContext): Promise<Response> => {
         const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
         if (subcommand === '') {
-            return sender.sendPlainText(ENV.I18N.command.help.img);
+            const imgAgent = loadImageGen(context.USER_CONFIG);
+            const text = `${ENV.I18N.command.help.img}\n\n${imgAgent?.name || 'Nan'} | ${imgAgent?.model(context.USER_CONFIG) || 'Nan'}`;
+            const params: Telegram.SendMessageParams = {
+                chat_id: message.chat.id,
+                text,
+                reply_markup: {
+                    inline_keyboard: [[
+                        {
+                            text: ENV.I18N.callback_query.open_model_list,
+                            callback_data: 'ial:',
+                        },
+                    ]],
+                },
+            };
+            return sender.sendRawMessage(params);
         }
         try {
             const api = createTelegramBotAPI(context.SHARE_CONTEXT.botToken);
@@ -117,7 +131,7 @@ export class SetEnvCommandHandler implements CommandHandler {
         const key = subcommand.slice(0, kv);
         const value = subcommand.slice(kv + 1);
         try {
-            await context.execChangeAndSave({ [key]: value });
+            await context.execChangeAndSave({ [key]: value } as Record<AgentUserConfigKey, any>);
             return sender.sendPlainText('Update user config success');
         } catch (e) {
             return sender.sendPlainText(`ERROR: ${(e as Error).message}`);
@@ -145,7 +159,7 @@ export class DelEnvCommandHandler implements CommandHandler {
     needAuth = TELEGRAM_AUTH_CHECKER.shareModeGroup;
     handle = async (message: Telegram.Message, subcommand: string, context: WorkerContext): Promise<Response> => {
         const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
-        if (ENV.LOCK_USER_CONFIG_KEYS.includes(subcommand)) {
+        if (ENV.LOCK_USER_CONFIG_KEYS.includes(subcommand as AgentUserConfigKey)) {
             const msg = `Key ${subcommand} is locked`;
             return sender.sendPlainText(msg);
         }
@@ -222,24 +236,21 @@ export class SystemCommandHandler implements CommandHandler {
             AI_IMAGE_PROVIDER: imageAgent?.name,
             [imageAgent?.modelKey || 'AI_IMAGE_PROVIDER_NOT_FOUND']: imageAgent?.model(context.USER_CONFIG),
         };
-        let msg = `AGENT: ${JSON.stringify(agent, null, 2)}\n`;
+        let msg = `<strong>AGENT</strong><pre>${JSON.stringify(agent, null, 2)}</pre>`;
         if (ENV.DEV_MODE) {
-            const shareCtx = { ...context.SHARE_CONTEXT };
-            shareCtx.botToken = '******';
-            context.USER_CONFIG.ANTHROPIC_API_KEY = '******';
-            context.USER_CONFIG.AZURE_API_KEY = '******';
-            context.USER_CONFIG.COHERE_API_KEY = '******';
-            context.USER_CONFIG.GOOGLE_API_KEY = '******';
-            context.USER_CONFIG.MISTRAL_API_KEY = '******';
-            context.USER_CONFIG.OPENAI_API_KEY = ['******'];
-            context.USER_CONFIG.CLOUDFLARE_ACCOUNT_ID = '******';
-            context.USER_CONFIG.CLOUDFLARE_TOKEN = '******';
             const config = ConfigMerger.trim(context.USER_CONFIG, ENV.LOCK_USER_CONFIG_KEYS);
-            msg = `<pre>\n${msg}`;
-            msg += `USER_CONFIG: ${JSON.stringify(config, null, 2)}\n`;
-            msg += `CHAT_CONTEXT: ${JSON.stringify(sender.context || {}, null, 2)}\n`;
-            msg += `SHARE_CONTEXT: ${JSON.stringify(shareCtx, null, 2)}\n`;
-            msg += '</pre>';
+            msg += `\n\n<strong>USER_CONFIG</strong><pre>${JSON.stringify(config, null, 2)}</pre>`;
+
+            const secretsSuffix = ['_API_KEY', '_TOKEN', '_ACCOUNT_ID'];
+            for (const key of Object.keys(context.USER_CONFIG)) {
+                if (secretsSuffix.some(suffix => key.endsWith(suffix))) {
+                    context.USER_CONFIG[key] = '******';
+                }
+            }
+            msg += `\n\n<strong>CHAT_CONTEXT</strong><pre>${JSON.stringify(sender.context || {}, null, 2)}</pre>`;
+
+            const shareCtx = { ...context.SHARE_CONTEXT, botToken: '******' };
+            msg += `\n\n<strong>SHARE_CONTEXT</strong><pre>${JSON.stringify(shareCtx, null, 2)}</pre>`;
         }
         return sender.sendRichText(msg, 'HTML');
     };
@@ -285,9 +296,10 @@ export class ModelsCommandHandler implements CommandHandler {
     handle = async (message: Telegram.Message, subcommand: string, context: WorkerContext): Promise<Response> => {
         const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
         const chatAgent = loadChatLLM(context.USER_CONFIG);
+        const text = `${chatAgent?.name || 'Nan'} | ${chatAgent?.model(context.USER_CONFIG) || 'Nan'}`;
         const params: Telegram.SendMessageParams = {
             chat_id: message.chat.id,
-            text: `${chatAgent?.name || 'Nan'} | ${chatAgent?.model(context.USER_CONFIG) || 'Nan'}`,
+            text,
             reply_markup: {
                 inline_keyboard: [[
                     {

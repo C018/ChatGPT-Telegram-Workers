@@ -1,41 +1,3 @@
-class EnvironmentConfig {
-  LANGUAGE = "zh-cn";
-  UPDATE_BRANCH = "master";
-  CHAT_COMPLETE_API_TIMEOUT = 0;
-  TELEGRAM_API_DOMAIN = "https://api.telegram.org";
-  TELEGRAM_AVAILABLE_TOKENS = [];
-  DEFAULT_PARSE_MODE = "Markdown";
-  TELEGRAM_MIN_STREAM_INTERVAL = 0;
-  TELEGRAM_PHOTO_SIZE_OFFSET = 1;
-  TELEGRAM_IMAGE_TRANSFER_MODE = "url";
-  MODEL_LIST_COLUMNS = 1;
-  I_AM_A_GENEROUS_PERSON = false;
-  CHAT_WHITE_LIST = [];
-  LOCK_USER_CONFIG_KEYS = [
-    "OPENAI_API_BASE",
-    "GOOGLE_COMPLETIONS_API",
-    "MISTRAL_API_BASE",
-    "COHERE_API_BASE",
-    "ANTHROPIC_API_BASE",
-    "AZURE_COMPLETIONS_API",
-    "AZURE_DALLE_API"
-  ];
-  TELEGRAM_BOT_NAME = [];
-  CHAT_GROUP_WHITE_LIST = [];
-  GROUP_CHAT_BOT_ENABLE = true;
-  GROUP_CHAT_BOT_SHARE_MODE = true;
-  AUTO_TRIM_HISTORY = true;
-  MAX_HISTORY_LENGTH = 20;
-  MAX_TOKEN_LENGTH = -1;
-  HISTORY_IMAGE_PLACEHOLDER = null;
-  HIDE_COMMAND_BUTTONS = [];
-  SHOW_REPLY_BUTTON = false;
-  EXTRA_MESSAGE_CONTEXT = false;
-  STREAM_MODE = true;
-  SAFE_MODE = true;
-  DEBUG_MODE = false;
-  DEV_MODE = false;
-}
 class AgentShareConfig {
   AI_PROVIDER = "auto";
   AI_IMAGE_PROVIDER = "auto";
@@ -53,48 +15,109 @@ class DallEConfig {
   DALL_E_IMAGE_SIZE = "1024x1024";
   DALL_E_IMAGE_QUALITY = "standard";
   DALL_E_IMAGE_STYLE = "vivid";
+  DALL_E_MODELS_LIST = '["dall-e-3"]';
 }
 class AzureConfig {
   AZURE_API_KEY = null;
   AZURE_RESOURCE_NAME = null;
-  AZURE_CHAT_MODEL = null;
-  AZURE_IMAGE_MODEL = null;
+  AZURE_CHAT_MODEL = "gpt-4o-mini";
+  AZURE_IMAGE_MODEL = "dall-e-3";
   AZURE_API_VERSION = "2024-06-01";
-  AZURE_CHAT_MODELS_LIST = "[]";
+  AZURE_CHAT_MODELS_LIST = "";
+  AZURE_CHAT_EXTRA_PARAMS = {};
 }
 class WorkersConfig {
   CLOUDFLARE_ACCOUNT_ID = null;
   CLOUDFLARE_TOKEN = null;
-  WORKERS_CHAT_MODEL = "@cf/mistral/mistral-7b-instruct-v0.1 ";
-  WORKERS_IMAGE_MODEL = "@cf/stabilityai/stable-diffusion-xl-base-1.0";
+  WORKERS_CHAT_MODEL = "@cf/qwen/qwen1.5-7b-chat-awq";
+  WORKERS_IMAGE_MODEL = "@cf/black-forest-labs/flux-1-schnell";
   WORKERS_CHAT_MODELS_LIST = "";
+  WORKERS_IMAGE_MODELS_LIST = "";
+  WORKERS_CHAT_EXTRA_PARAMS = {};
 }
 class GeminiConfig {
   GOOGLE_API_KEY = null;
   GOOGLE_API_BASE = "https://generativelanguage.googleapis.com/v1beta";
-  GOOGLE_COMPLETIONS_MODEL = "gemini-1.5-flash";
+  GOOGLE_CHAT_MODEL = "gemini-1.5-flash";
   GOOGLE_CHAT_MODELS_LIST = "";
+  GOOGLE_CHAT_EXTRA_PARAMS = {};
 }
 class MistralConfig {
   MISTRAL_API_KEY = null;
   MISTRAL_API_BASE = "https://api.mistral.ai/v1";
   MISTRAL_CHAT_MODEL = "mistral-tiny";
   MISTRAL_CHAT_MODELS_LIST = "";
+  MISTRAL_CHAT_EXTRA_PARAMS = {};
 }
 class CohereConfig {
   COHERE_API_KEY = null;
   COHERE_API_BASE = "https://api.cohere.com/v2";
   COHERE_CHAT_MODEL = "command-r-plus";
   COHERE_CHAT_MODELS_LIST = "";
+  COHERE_CHAT_EXTRA_PARAMS = {};
 }
 class AnthropicConfig {
   ANTHROPIC_API_KEY = null;
   ANTHROPIC_API_BASE = "https://api.anthropic.com/v1";
   ANTHROPIC_CHAT_MODEL = "claude-3-5-haiku-latest";
-  ANTHROPIC_CHAT_MODELS_LIST = `["claude-3-5-sonnet-latest", "claude-3-5-haiku-latest"]`;
+  ANTHROPIC_CHAT_MODELS_LIST = "";
+  ANTHROPIC_CHAT_EXTRA_PARAMS = {};
+}
+class DeepSeekConfig {
+  DEEPSEEK_API_KEY = null;
+  DEEPSEEK_API_BASE = "https://api.deepseek.com";
+  DEEPSEEK_CHAT_MODEL = "deepseek-chat";
+  DEEPSEEK_CHAT_MODELS_LIST = "";
+  DEEPSEEK_CHAT_EXTRA_PARAMS = {};
+}
+class GorqConfig {
+  GORQ_API_KEY = null;
+  GORQ_API_BASE = "https://api.groq.com/openai/v1";
+  GORQ_CHAT_MODEL = "gorq-chat";
+  GORQ_CHAT_MODELS_LIST = "";
+  GORQ_CHAT_EXTRA_PARAMS = {};
 }
 class DefineKeys {
   DEFINE_KEYS = [];
+}
+class EnvironmentConfig {
+  LANGUAGE = "zh-cn";
+  UPDATE_BRANCH = "master";
+  CHAT_COMPLETE_API_TIMEOUT = 0;
+  TELEGRAM_API_DOMAIN = "https://api.telegram.org";
+  TELEGRAM_AVAILABLE_TOKENS = [];
+  DEFAULT_PARSE_MODE = "Markdown";
+  TELEGRAM_MIN_STREAM_INTERVAL = 0;
+  TELEGRAM_PHOTO_SIZE_OFFSET = 1;
+  TELEGRAM_IMAGE_TRANSFER_MODE = "base64";
+  MODEL_LIST_COLUMNS = 1;
+  I_AM_A_GENEROUS_PERSON = false;
+  CHAT_WHITE_LIST = [];
+  LOCK_USER_CONFIG_KEYS = [
+    "OPENAI_API_BASE",
+    "GOOGLE_API_BASE",
+    "MISTRAL_API_BASE",
+    "COHERE_API_BASE",
+    "ANTHROPIC_API_BASE",
+    "DEEPSEEK_API_BASE",
+    "GORQ_API_BASE"
+  ];
+  TELEGRAM_BOT_NAME = [];
+  CHAT_GROUP_WHITE_LIST = [];
+  GROUP_CHAT_BOT_ENABLE = true;
+  GROUP_CHAT_BOT_SHARE_MODE = true;
+  AUTO_TRIM_HISTORY = true;
+  MAX_HISTORY_LENGTH = 20;
+  MAX_TOKEN_LENGTH = -1;
+  HISTORY_IMAGE_PLACEHOLDER = null;
+  HIDE_COMMAND_BUTTONS = [];
+  SHOW_REPLY_BUTTON = false;
+  EXTRA_MESSAGE_CONTEXT = false;
+  EXTRA_MESSAGE_MEDIA_COMPATIBLE = ["image"];
+  STREAM_MODE = true;
+  SAFE_MODE = true;
+  DEBUG_MODE = false;
+  DEV_MODE = false;
 }
 const en = { "env": { "system_init_message": "You are a helpful assistant" }, "command": { "help": { "summary": "The following commands are currently supported:\n", "help": "Get command help", "new": "Start a new conversation", "start": "Get your ID and start a new conversation", "img": "Generate an image, the complete command format is `/img image description`, for example `/img beach at moonlight`", "version": "Get the current version number to determine whether to update", "setenv": "Set user configuration, the complete command format is /setenv KEY=VALUE", "setenvs": 'Batch set user configurations, the full format of the command is /setenvs {"KEY1": "VALUE1", "KEY2": "VALUE2"}', "delenv": "Delete user configuration, the complete command format is /delenv KEY", "clearenv": "Clear all user configuration", "system": "View some system information", "redo": "Redo the last conversation, /redo with modified content or directly /redo", "echo": "Echo the message", "models": "switch chat model" }, "new": { "new_chat_start": "A new conversation has started" } }, "callback_query": { "open_model_list": "Open models list", "select_provider": "Select a provider:", "select_model": "Choose model:", "change_model": "Change model to " } };
 const pt = { "env": { "system_init_message": "Você é um assistente útil" }, "command": { "help": { "summary": "Os seguintes comandos são suportados atualmente:\n", "help": "Obter ajuda sobre comandos", "new": "Iniciar uma nova conversa", "start": "Obter seu ID e iniciar uma nova conversa", "img": "Gerar uma imagem, o formato completo do comando é `/img descrição da imagem`, por exemplo `/img praia ao luar`", "version": "Obter o número da versão atual para determinar se é necessário atualizar", "setenv": "Definir configuração do usuário, o formato completo do comando é /setenv CHAVE=VALOR", "setenvs": 'Definir configurações do usuário em lote, o formato completo do comando é /setenvs {"CHAVE1": "VALOR1", "CHAVE2": "VALOR2"}', "delenv": "Excluir configuração do usuário, o formato completo do comando é /delenv CHAVE", "clearenv": "Limpar todas as configurações do usuário", "system": "Ver algumas informações do sistema", "redo": "Refazer a última conversa, /redo com conteúdo modificado ou diretamente /redo", "echo": "Repetir a mensagem", "models": "Mudar o modelo de diálogo" }, "new": { "new_chat_start": "Uma nova conversa foi iniciada" } }, "callback_query": { "open_model_list": "Abra a lista de modelos", "select_provider": "Escolha um fornecedor de modelos.:", "select_model": "Escolha um modelo:", "change_model": "O modelo de diálogo já foi modificado para" } };
@@ -159,7 +182,7 @@ class ConfigMerger {
       if (exclude && exclude.includes(key)) {
         continue;
       }
-      const t = target[key] !== null && target[key] !== void 0 ? typeof target[key] : "string";
+      const t = target[key] !== null && target[key] !== undefined ? typeof target[key] : "string";
       if (typeof source[key] !== "string") {
         target[key] = source[key];
         continue;
@@ -192,8 +215,8 @@ class ConfigMerger {
     }
   }
 }
-const BUILD_TIMESTAMP = 1732772382;
-const BUILD_VERSION = "6836b5c";
+const BUILD_TIMESTAMP = 1740391917;
+const BUILD_VERSION = "37c1213";
 function createAgentUserConfig() {
   return Object.assign(
     {},
@@ -206,8 +229,13 @@ function createAgentUserConfig() {
     new GeminiConfig(),
     new MistralConfig(),
     new CohereConfig(),
-    new AnthropicConfig()
+    new AnthropicConfig(),
+    new DeepSeekConfig(),
+    new GorqConfig()
   );
+}
+function fixApiBase(base) {
+  return base.replace(/\/+$/, "");
 }
 const ENV_KEY_MAPPER = {
   CHAT_MODEL: "OPENAI_CHAT_MODEL",
@@ -222,14 +250,16 @@ class Environment extends EnvironmentConfig {
   USER_CONFIG = createAgentUserConfig();
   CUSTOM_COMMAND = {};
   PLUGINS_COMMAND = {};
-  DATABASE = null;
+  AI_BINDING = null;
   API_GUARD = null;
+  DATABASE = null;
   CUSTOM_MESSAGE_RENDER = null;
   constructor() {
     super();
     this.merge = this.merge.bind(this);
   }
   merge(source) {
+    this.AI_BINDING = source.AI;
     this.DATABASE = source.DATABASE;
     this.API_GUARD = source.API_GUARD;
     this.mergeCommands(
@@ -266,6 +296,7 @@ class Environment extends EnvironmentConfig {
     ]);
     ConfigMerger.merge(this.USER_CONFIG, source);
     this.migrateOldEnv(source);
+    this.fixAgentUserConfigApiBase();
     this.USER_CONFIG.DEFINE_KEYS = [];
     this.I18N = loadI18n(this.LANGUAGE.toLowerCase());
   }
@@ -309,15 +340,33 @@ class Environment extends EnvironmentConfig {
     if (source.AZURE_COMPLETIONS_API && !this.USER_CONFIG.AZURE_CHAT_MODEL) {
       const url = new URL(source.AZURE_COMPLETIONS_API);
       this.USER_CONFIG.AZURE_RESOURCE_NAME = url.hostname.split(".").at(0) || null;
-      this.USER_CONFIG.AZURE_CHAT_MODEL = url.pathname.split("/").at(3) || null;
+      this.USER_CONFIG.AZURE_CHAT_MODEL = url.pathname.split("/").at(3) || "gpt-4o-mini";
       this.USER_CONFIG.AZURE_API_VERSION = url.searchParams.get("api-version") || "2024-06-01";
     }
     if (source.AZURE_DALLE_API && !this.USER_CONFIG.AZURE_IMAGE_MODEL) {
       const url = new URL(source.AZURE_DALLE_API);
       this.USER_CONFIG.AZURE_RESOURCE_NAME = url.hostname.split(".").at(0) || null;
-      this.USER_CONFIG.AZURE_IMAGE_MODEL = url.pathname.split("/").at(3) || null;
+      this.USER_CONFIG.AZURE_IMAGE_MODEL = url.pathname.split("/").at(3) || "dall-e-3";
       this.USER_CONFIG.AZURE_API_VERSION = url.searchParams.get("api-version") || "2024-06-01";
     }
+  }
+  fixAgentUserConfigApiBase() {
+    const keys = [
+      "OPENAI_API_BASE",
+      "GOOGLE_API_BASE",
+      "MISTRAL_API_BASE",
+      "COHERE_API_BASE",
+      "ANTHROPIC_API_BASE",
+      "DEEPSEEK_API_BASE",
+      "GORQ_API_BASE"
+    ];
+    for (const key of keys) {
+      const base = this.USER_CONFIG[key];
+      if (this.USER_CONFIG[key] && typeof base === "string") {
+        this.USER_CONFIG[key] = fixApiBase(base);
+      }
+    }
+    this.TELEGRAM_API_DOMAIN = fixApiBase(this.TELEGRAM_API_DOMAIN);
   }
 }
 const ENV = new Environment();
@@ -341,7 +390,7 @@ class ShareContext {
     this.botToken = token;
     this.botId = botId;
     const id = update.chatID;
-    if (id === void 0 || id === null) {
+    if (id === undefined || id === null) {
       throw new Error("Chat id not found");
     }
     let historyKey = `history:${id}`;
@@ -446,10 +495,7 @@ class APIClientBase {
   constructor(token, baseURL) {
     this.token = token;
     if (baseURL) {
-      this.baseURL = baseURL;
-    }
-    while (this.baseURL.endsWith("/")) {
-      this.baseURL = this.baseURL.slice(0, -1);
+      this.baseURL = baseURL.replace(/\/+$/, "");
     }
     this.request = this.request.bind(this);
     this.requestJSON = this.requestJSON.bind(this);
@@ -597,12 +643,6 @@ class GroupMention {
     if (!isMention) {
       throw new Error("Not mention");
     }
-    if (ENV.EXTRA_MESSAGE_CONTEXT && !replyMe && message.reply_to_message && message.reply_to_message.text) {
-      if (message.text) {
-        message.text = `${message.reply_to_message.text}
-${message.text}`;
-      }
-    }
     return null;
   };
 }
@@ -713,7 +753,7 @@ class MessageSender {
       const params = {
         chat_id: context.chat_id,
         message_id: context.message_id,
-        parse_mode: context.parse_mode || void 0,
+        parse_mode: context.parse_mode || undefined,
         text: message
       };
       if (context.disable_web_page_preview) {
@@ -725,14 +765,14 @@ class MessageSender {
     } else {
       const params = {
         chat_id: context.chat_id,
-        parse_mode: context.parse_mode || void 0,
+        parse_mode: context.parse_mode || undefined,
         text: message
       };
       if (context.reply_to_message_id) {
         params.reply_parameters = {
           message_id: context.reply_to_message_id,
           chat_id: context.chat_id,
-          allow_sending_without_reply: context.allow_sending_without_reply || void 0
+          allow_sending_without_reply: context.allow_sending_without_reply || undefined
         };
       }
       if (context.disable_web_page_preview) {
@@ -811,90 +851,11 @@ class MessageSender {
       params.reply_parameters = {
         message_id: this.context.reply_to_message_id,
         chat_id: this.context.chat_id,
-        allow_sending_without_reply: this.context.allow_sending_without_reply || void 0
+        allow_sending_without_reply: this.context.allow_sending_without_reply || undefined
       };
     }
     return this.api.sendPhoto(params);
   }
-}
-class Cache {
-  maxItems;
-  maxAge;
-  cache;
-  constructor() {
-    this.maxItems = 10;
-    this.maxAge = 1e3 * 60 * 60;
-    this.cache = {};
-    this.set = this.set.bind(this);
-    this.get = this.get.bind(this);
-  }
-  set(key, value) {
-    this.trim();
-    this.cache[key] = {
-      value,
-      time: Date.now()
-    };
-  }
-  get(key) {
-    this.trim();
-    return this.cache[key]?.value;
-  }
-  trim() {
-    let keys = Object.keys(this.cache);
-    for (const key of keys) {
-      if (Date.now() - this.cache[key].time > this.maxAge) {
-        delete this.cache[key];
-      }
-    }
-    keys = Object.keys(this.cache);
-    if (keys.length > this.maxItems) {
-      keys.sort((a, b) => this.cache[a].time - this.cache[b].time);
-      for (let i = 0; i < keys.length - this.maxItems; i++) {
-        delete this.cache[keys[i]];
-      }
-    }
-  }
-}
-const IMAGE_CACHE = new Cache();
-async function fetchImage(url) {
-  const cache = IMAGE_CACHE.get(url);
-  if (cache) {
-    return cache;
-  }
-  return fetch(url).then((resp) => resp.blob()).then((blob) => {
-    IMAGE_CACHE.set(url, blob);
-    return blob;
-  });
-}
-async function urlToBase64String(url) {
-  if (typeof Buffer !== "undefined") {
-    return fetchImage(url).then((blob) => blob.arrayBuffer()).then((buffer) => Buffer.from(buffer).toString("base64"));
-  } else {
-    return fetchImage(url).then((blob) => blob.arrayBuffer()).then((buffer) => btoa(String.fromCharCode.apply(null, new Uint8Array(buffer))));
-  }
-}
-function getImageFormatFromBase64(base64String) {
-  const firstChar = base64String.charAt(0);
-  switch (firstChar) {
-    case "/":
-      return "jpeg";
-    case "i":
-      return "png";
-    case "R":
-      return "gif";
-    case "U":
-      return "webp";
-    default:
-      throw new Error("Unsupported image format");
-  }
-}
-async function imageToBase64String(url) {
-  const base64String = await urlToBase64String(url);
-  const format = getImageFormatFromBase64(base64String);
-  return {
-    data: base64String,
-    format: `image/${format}`
-  };
 }
 class Stream {
   response;
@@ -1111,11 +1072,12 @@ function fixOpenAICompatibleOptions(options) {
   return options;
 }
 function isJsonResponse(resp) {
-  return resp.headers.get("content-type")?.includes("json") || false;
+  const contentType = resp.headers.get("content-type");
+  return contentType?.toLowerCase().includes("application/json") ?? false;
 }
 function isEventStreamResponse(resp) {
   const types = ["application/stream+json", "text/event-stream"];
-  const content = resp.headers.get("content-type") || "";
+  const content = resp.headers.get("content-type")?.toLowerCase() || "";
   for (const type of types) {
     if (content.includes(type)) {
       return true;
@@ -1146,7 +1108,7 @@ async function streamHandler(stream, contentExtractor, onStream) {
         }
         lengthDelta = 0;
         updateStep += 20;
-        await onStream(`${contentFull}
+        await onStream?.(`${contentFull}
 ...`);
       }
     }
@@ -1156,25 +1118,10 @@ Error: ${e.message}`;
   }
   return contentFull;
 }
-async function requestChatCompletions(url, header, body, onStream, options = null) {
-  const controller = new AbortController();
-  const { signal } = controller;
-  let timeoutID = null;
-  if (ENV.CHAT_COMPLETE_API_TIMEOUT > 0) {
-    timeoutID = setTimeout(() => controller.abort(), ENV.CHAT_COMPLETE_API_TIMEOUT);
-  }
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: header,
-    body: JSON.stringify(body),
-    signal
-  });
-  if (timeoutID) {
-    clearTimeout(timeoutID);
-  }
-  options = fixOpenAICompatibleOptions(options);
+async function mapResponseToAnswer(resp, controller, options, onStream) {
+  options = fixOpenAICompatibleOptions(options || null);
   if (onStream && resp.ok && isEventStreamResponse(resp)) {
-    const stream = options.streamBuilder?.(resp, controller);
+    const stream = options.streamBuilder?.(resp, controller || new AbortController());
     if (!stream) {
       throw new Error("Stream builder error");
     }
@@ -1191,6 +1138,24 @@ async function requestChatCompletions(url, header, body, onStream, options = nul
     throw new Error(options.errorExtractor?.(result) || "Unknown error");
   }
   return options.fullContentExtractor?.(result) || "";
+}
+async function requestChatCompletions(url, header, body, onStream, options) {
+  const controller = new AbortController();
+  const { signal } = controller;
+  let timeoutID = null;
+  if (ENV.CHAT_COMPLETE_API_TIMEOUT > 0) {
+    timeoutID = setTimeout(() => controller.abort(), ENV.CHAT_COMPLETE_API_TIMEOUT);
+  }
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: header,
+    body: JSON.stringify(body),
+    signal
+  });
+  if (timeoutID) {
+    clearTimeout(timeoutID);
+  }
+  return await mapResponseToAnswer(resp, controller, options, onStream);
 }
 function extractTextContent(history) {
   if (typeof history.content === "string") {
@@ -1217,19 +1182,21 @@ function extractImageContent(imageData) {
       return { base64: imageData };
     }
   }
-  if (imageData instanceof Uint8Array) {
-    return { base64: Buffer.from(imageData).toString("base64") };
-  }
-  if (Buffer.isBuffer(imageData)) {
-    return { base64: Buffer.from(imageData).toString("base64") };
+  if (typeof Buffer !== "undefined") {
+    if (imageData instanceof Uint8Array) {
+      return { base64: Buffer.from(imageData).toString("base64") };
+    }
+    if (Buffer.isBuffer(imageData)) {
+      return { base64: Buffer.from(imageData).toString("base64") };
+    }
   }
   return {};
 }
 async function convertStringToResponseMessages(input) {
-  const text = await input;
+  const text = typeof input === "string" ? input : await input;
   return {
     text,
-    responses: [{ role: "assistant", content: await input }]
+    responses: [{ role: "assistant", content: text }]
   };
 }
 async function loadModelsList(raw, remoteLoader) {
@@ -1247,15 +1214,277 @@ async function loadModelsList(raw, remoteLoader) {
   if (raw.startsWith("http") && remoteLoader) {
     return await remoteLoader(raw);
   }
-  return [];
+  return [raw];
+}
+function bearerHeader(token, stream) {
+  const res = {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json"
+  };
+  if (stream !== undefined) {
+    res.Accept = stream ? "text/event-stream" : "application/json";
+  }
+  return res;
+}
+function getAgentUserConfigFieldName(fieldName) {
+  return fieldName;
+}
+class Cache {
+  maxItems;
+  maxAge;
+  cache;
+  constructor() {
+    this.maxItems = 10;
+    this.maxAge = 1e3 * 60 * 60;
+    this.cache = {};
+    this.set = this.set.bind(this);
+    this.get = this.get.bind(this);
+  }
+  set(key, value) {
+    this.trim();
+    this.cache[key] = {
+      value,
+      time: Date.now()
+    };
+  }
+  get(key) {
+    this.trim();
+    return this.cache[key]?.value;
+  }
+  trim() {
+    let keys = Object.keys(this.cache);
+    for (const key of keys) {
+      if (Date.now() - this.cache[key].time > this.maxAge) {
+        delete this.cache[key];
+      }
+    }
+    keys = Object.keys(this.cache);
+    if (keys.length > this.maxItems) {
+      keys.sort((a, b) => this.cache[a].time - this.cache[b].time);
+      for (let i = 0; i < keys.length - this.maxItems; i++) {
+        delete this.cache[keys[i]];
+      }
+    }
+  }
+}
+const IMAGE_CACHE = new Cache();
+async function fetchImage(url) {
+  const cache = IMAGE_CACHE.get(url);
+  if (cache) {
+    return cache;
+  }
+  return fetch(url).then((resp) => resp.blob()).then((blob) => {
+    IMAGE_CACHE.set(url, blob);
+    return blob;
+  });
+}
+async function urlToBase64String(url) {
+  if (typeof Buffer !== "undefined") {
+    return fetchImage(url).then((blob) => blob.arrayBuffer()).then((buffer) => Buffer.from(buffer).toString("base64"));
+  } else {
+    return fetchImage(url).then((blob) => blob.arrayBuffer()).then((buffer) => btoa(String.fromCharCode.apply(null, new Uint8Array(buffer))));
+  }
+}
+function getImageFormatFromBase64(base64String) {
+  const firstChar = base64String.charAt(0);
+  switch (firstChar) {
+    case "/":
+      return "jpeg";
+    case "i":
+      return "png";
+    case "U":
+      return "webp";
+    default:
+      throw new Error("Unsupported image format");
+  }
+}
+async function imageToBase64String(url) {
+  const base64String = await urlToBase64String(url);
+  const format = getImageFormatFromBase64(base64String);
+  return {
+    data: base64String,
+    format: `image/${format}`
+  };
+}
+function renderBase64DataURI(params) {
+  return `data:${params.format};base64,${params.data}`;
+}
+var ImageSupportFormat =  ((ImageSupportFormat2) => {
+  ImageSupportFormat2["URL"] = "url";
+  ImageSupportFormat2["BASE64"] = "base64";
+  return ImageSupportFormat2;
+})(ImageSupportFormat || {});
+async function renderOpenAIMessage(item, supportImage) {
+  const res = {
+    role: item.role,
+    content: item.content
+  };
+  if (Array.isArray(item.content)) {
+    const contents = [];
+    for (const content of item.content) {
+      switch (content.type) {
+        case "text":
+          contents.push({ type: "text", text: content.text });
+          break;
+        case "image":
+          if (supportImage) {
+            const isSupportURL = supportImage.includes("url" );
+            const isSupportBase64 = supportImage.includes("base64" );
+            const data = extractImageContent(content.image);
+            if (data.url) {
+              if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === "base64" && isSupportBase64) {
+                contents.push(await imageToBase64String(data.url).then((data2) => {
+                  return { type: "image_url", image_url: { url: renderBase64DataURI(data2) } };
+                }));
+              } else if (isSupportURL) {
+                contents.push({ type: "image_url", image_url: { url: data.url } });
+              }
+            } else if (data.base64 && isSupportBase64) {
+              contents.push({ type: "image_base64", image_base64: { base64: data.base64 } });
+            }
+          }
+          break;
+      }
+    }
+    res.content = contents;
+  }
+  return res;
+}
+async function renderOpenAIMessages(prompt, items, supportImage) {
+  const messages = await Promise.all(items.map((r) => renderOpenAIMessage(r, supportImage)));
+  if (prompt) {
+    if (messages.length > 0 && messages[0].role === "system") {
+      messages.shift();
+    }
+    messages.unshift({ role: "system", content: prompt });
+  }
+  return messages;
+}
+function loadOpenAIModelList(list, base, headers) {
+  if (list === "") {
+    list = `${base}/models`;
+  }
+  return loadModelsList(list, async (url) => {
+    const data = await fetch(url, { headers }).then((res) => res.json());
+    return data.data?.map((model) => model.id) || [];
+  });
+}
+function agentConfigFieldGetter(fields) {
+  return (ctx) => ({
+    base: ctx[fields.base],
+    key: ctx[fields.key] || null,
+    model: ctx[fields.model],
+    modelsList: ctx[fields.modelsList],
+    extraParams: ctx[fields.extraParams] || undefined
+  });
+}
+function createOpenAIRequest(builder, options, hooks) {
+  return async (params, context, onStream) => {
+    const { url, header, body } = await builder(params, context, onStream !== null);
+    if (onStream && hooks?.stream) {
+      const onStreamOriginal = onStream;
+      onStream = (text) => {
+        return onStreamOriginal(hooks.stream(text));
+      };
+    }
+    let output = await requestChatCompletions(url, header, body, onStream, options || null);
+    if (hooks?.finish) {
+      output = hooks.finish(output);
+    }
+    return convertStringToResponseMessages(output);
+  };
+}
+function createAgentEnable(valueGetter) {
+  return (ctx) => !!valueGetter(ctx).key;
+}
+function createAgentModel(valueGetter) {
+  return (ctx) => valueGetter(ctx).model;
+}
+function createAgentModelList(valueGetter) {
+  return (ctx) => {
+    const { base, key, modelsList } = valueGetter(ctx);
+    return loadOpenAIModelList(modelsList, base, bearerHeader(key));
+  };
+}
+function defaultOpenAIRequestBuilder(valueGetter, completionsEndpoint = "/chat/completions", supportImage = ["url" ]) {
+  return async (params, context, stream) => {
+    const { prompt, messages } = params;
+    const { base, key, model, extraParams } = valueGetter(context);
+    const url = `${base}${completionsEndpoint}`;
+    const header = bearerHeader(key, stream);
+    const body = {
+      ...extraParams || {},
+      model,
+      stream,
+      messages: await renderOpenAIMessages(prompt, messages, supportImage)
+    };
+    return { url, header, body };
+  };
+}
+class OpenAICompatibilityAgent {
+  name;
+  modelKey;
+  enable;
+  model;
+  modelList;
+  request;
+  constructor(name, fields, options, hooks) {
+    this.name = name;
+    this.modelKey = getAgentUserConfigFieldName(fields.model);
+    const valueGetter = agentConfigFieldGetter(fields);
+    this.enable = createAgentEnable(valueGetter);
+    this.model = createAgentModel(valueGetter);
+    this.modelList = createAgentModelList(valueGetter);
+    this.request = createOpenAIRequest(defaultOpenAIRequestBuilder(valueGetter), options, hooks);
+  }
+}
+class DeepSeek extends OpenAICompatibilityAgent {
+  constructor() {
+    super("deepseek", {
+      base: "DEEPSEEK_API_BASE",
+      key: "DEEPSEEK_API_KEY",
+      model: "DEEPSEEK_CHAT_MODEL",
+      modelsList: "DEEPSEEK_CHAT_MODELS_LIST",
+      extraParams: "DEEPSEEK_CHAT_EXTRA_PARAMS"
+    });
+  }
+}
+class Gorq extends OpenAICompatibilityAgent {
+  constructor() {
+    super("gorq", {
+      base: "GORQ_API_BASE",
+      key: "GORQ_API_KEY",
+      model: "GORQ_CHAT_MODEL",
+      modelsList: "GORQ_CHAT_MODELS_LIST",
+      extraParams: "GORQ_CHAT_EXTRA_PARAMS"
+    });
+  }
+}
+class Mistral extends OpenAICompatibilityAgent {
+  constructor() {
+    super("mistral", {
+      base: "MISTRAL_API_BASE",
+      key: "MISTRAL_API_KEY",
+      model: "MISTRAL_CHAT_MODEL",
+      modelsList: "MISTRAL_CHAT_MODELS_LIST",
+      extraParams: "MISTRAL_CHAT_EXTRA_PARAMS"
+    });
+  }
+}
+function anthropicHeader(context) {
+  return {
+    "x-api-key": context.ANTHROPIC_API_KEY || "",
+    "anthropic-version": "2023-06-01",
+    "content-type": "application/json"
+  };
 }
 class Anthropic {
   name = "anthropic";
-  modelKey = "ANTHROPIC_CHAT_MODEL";
-  enable = (context) => {
-    return !!context.ANTHROPIC_API_KEY;
-  };
-  render = async (item) => {
+  modelKey = getAgentUserConfigFieldName("ANTHROPIC_CHAT_MODEL");
+  enable = (ctx) => !!ctx.ANTHROPIC_API_KEY;
+  model = (ctx) => ctx.ANTHROPIC_CHAT_MODEL;
+  modelList = (ctx) => loadOpenAIModelList(ctx.ANTHROPIC_CHAT_MODELS_LIST, ctx.ANTHROPIC_API_BASE, anthropicHeader(ctx));
+  static render = async (item) => {
     const res = {
       role: item.role,
       content: item.content
@@ -1287,9 +1516,6 @@ class Anthropic {
     }
     return res;
   };
-  model = (ctx) => {
-    return ctx.ANTHROPIC_CHAT_MODEL;
-  };
   static parser(sse) {
     switch (sse.event) {
       case "content_block_delta":
@@ -1312,18 +1538,15 @@ class Anthropic {
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
     const url = `${context.ANTHROPIC_API_BASE}/messages`;
-    const header = {
-      "x-api-key": context.ANTHROPIC_API_KEY || "",
-      "anthropic-version": "2023-06-01",
-      "content-type": "application/json"
-    };
+    const header = anthropicHeader(context);
     if (messages.length > 0 && messages[0].role === "system") {
       messages.shift();
     }
     const body = {
+      ...context.ANTHROPIC_CHAT_EXTRA_PARAMS || {},
       system: prompt,
       model: context.ANTHROPIC_CHAT_MODEL,
-      messages: (await Promise.all(messages.map((item) => this.render(item)))).filter((i) => i !== null),
+      messages: (await Promise.all(messages.map((item) => Anthropic.render(item)))).filter((i) => i !== null),
       stream: onStream != null,
       max_tokens: ENV.MAX_TOKEN_LENGTH > 0 ? ENV.MAX_TOKEN_LENGTH : 2048
     };
@@ -1345,188 +1568,50 @@ class Anthropic {
     };
     return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, options));
   };
-  modelList = async (context) => {
-    return loadModelsList(context.ANTHROPIC_CHAT_MODELS_LIST);
+}
+function azureHeader(context) {
+  return {
+    "Content-Type": "application/json",
+    "api-key": context.AZURE_API_KEY || ""
   };
 }
-async function renderOpenAIMessage(item, supportImage) {
-  const res = {
-    role: item.role,
-    content: item.content
-  };
-  if (Array.isArray(item.content)) {
-    const contents = [];
-    for (const content of item.content) {
-      switch (content.type) {
-        case "text":
-          contents.push({ type: "text", text: content.text });
-          break;
-        case "image":
-          if (supportImage) {
-            const data = extractImageContent(content.image);
-            if (data.url) {
-              if (ENV.TELEGRAM_IMAGE_TRANSFER_MODE === "base64") {
-                contents.push(await imageToBase64String(data.url).then(({ data: data2 }) => {
-                  return { type: "image_url", image_url: { url: data2 } };
-                }));
-              } else {
-                contents.push({ type: "image_url", image_url: { url: data.url } });
-              }
-            } else if (data.base64) {
-              contents.push({ type: "image_url", image_url: { url: data.base64 } });
-            }
-          }
-          break;
-      }
-    }
-    res.content = contents;
-  }
-  return res;
-}
-async function renderOpenAIMessages(prompt, items, supportImage) {
-  const messages = await Promise.all(items.map((r) => renderOpenAIMessage(r, supportImage)));
-  if (prompt) {
-    if (messages.length > 0 && messages[0].role === "system") {
-      messages.shift();
-    }
-    messages.unshift({ role: "system", content: prompt });
-  }
-  return messages;
-}
-class OpenAIBase {
-  name = "openai";
-  apikey = (context) => {
-    const length = context.OPENAI_API_KEY.length;
-    return context.OPENAI_API_KEY[Math.floor(Math.random() * length)];
-  };
-}
-class OpenAI extends OpenAIBase {
-  modelKey = "OPENAI_CHAT_MODEL";
-  enable = (context) => {
-    return context.OPENAI_API_KEY.length > 0;
-  };
-  model = (ctx) => {
-    return ctx.OPENAI_CHAT_MODEL;
-  };
-  render = async (item) => {
-    return renderOpenAIMessage(item);
-  };
+class AzureChatAI {
+  name = "azure";
+  modelKey = getAgentUserConfigFieldName("AZURE_CHAT_MODEL");
+  enable = (ctx) => !!(ctx.AZURE_API_KEY && ctx.AZURE_RESOURCE_NAME);
+  model = (ctx) => ctx.AZURE_CHAT_MODEL;
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
-    const url = `${context.OPENAI_API_BASE}/chat/completions`;
-    const header = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${this.apikey(context)}`
-    };
+    const url = `https://${context.AZURE_RESOURCE_NAME}.openai.azure.com/openai/deployments/${context.AZURE_CHAT_MODEL}/chat/completions?api-version=${context.AZURE_API_VERSION}`;
+    const header = azureHeader(context);
     const body = {
-      model: context.OPENAI_CHAT_MODEL,
-      ...context.OPENAI_API_EXTRA_PARAMS,
-      messages: await renderOpenAIMessages(prompt, messages, true),
+      ...context.AZURE_CHAT_EXTRA_PARAMS || {},
+      messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.URL, ImageSupportFormat.BASE64]),
       stream: onStream != null
     };
-    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
+    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, null));
   };
   modelList = async (context) => {
-    if (context.OPENAI_CHAT_MODELS_LIST === "") {
-      context.OPENAI_CHAT_MODELS_LIST = `${context.OPENAI_API_BASE}/models`;
+    if (context.AZURE_CHAT_MODELS_LIST === "") {
+      context.AZURE_CHAT_MODELS_LIST = `https://${context.AZURE_RESOURCE_NAME}.openai.azure.com/openai/models?api-version=${context.AZURE_API_VERSION}`;
     }
-    return loadModelsList(context.OPENAI_CHAT_MODELS_LIST, async (url) => {
+    return loadModelsList(context.AZURE_CHAT_MODELS_LIST, async (url) => {
       const data = await fetch(url, {
-        headers: { Authorization: `Bearer ${this.apikey(context)}` }
+        headers: azureHeader(context)
       }).then((res) => res.json());
       return data.data?.map((model) => model.id) || [];
     });
   };
 }
-class Dalle extends OpenAIBase {
-  modelKey = "OPENAI_DALLE_API";
-  enable = (context) => {
-    return context.OPENAI_API_KEY.length > 0;
-  };
-  model = (ctx) => {
-    return ctx.DALL_E_MODEL;
-  };
-  request = async (prompt, context) => {
-    const url = `${context.OPENAI_API_BASE}/images/generations`;
-    const header = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${this.apikey(context)}`
-    };
-    const body = {
-      prompt,
-      n: 1,
-      size: context.DALL_E_IMAGE_SIZE,
-      model: context.DALL_E_MODEL
-    };
-    if (body.model === "dall-e-3") {
-      body.quality = context.DALL_E_IMAGE_QUALITY;
-      body.style = context.DALL_E_IMAGE_STYLE;
-    }
-    const resp = await fetch(url, {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(body)
-    }).then((res) => res.json());
-    if (resp.error?.message) {
-      throw new Error(resp.error.message);
-    }
-    return resp?.data?.at(0)?.url;
-  };
-}
-class AzureBase {
+class AzureImageAI {
   name = "azure";
-  modelFromURI = (uri) => {
-    if (!uri) {
-      return "";
-    }
-    try {
-      const url = new URL(uri);
-      return url.pathname.split("/")[3];
-    } catch {
-      return uri;
-    }
-  };
-}
-class AzureChatAI extends AzureBase {
-  modelKey = "AZURE_CHAT_MODEL";
-  enable = (context) => {
-    return !!(context.AZURE_API_KEY && context.AZURE_RESOURCE_NAME);
-  };
-  model = (ctx) => {
-    return ctx.AZURE_CHAT_MODEL;
-  };
-  request = async (params, context, onStream) => {
-    const { prompt, messages } = params;
-    const url = `https://${context.AZURE_RESOURCE_NAME}.openai.azure.com/openai/deployments/${context.AZURE_CHAT_MODEL}/chat/completions?api-version=${context.AZURE_API_VERSION}`;
-    const header = {
-      "Content-Type": "application/json",
-      "api-key": context.AZURE_API_KEY || ""
-    };
-    const body = {
-      ...context.OPENAI_API_EXTRA_PARAMS,
-      messages: await renderOpenAIMessages(prompt, messages, true),
-      stream: onStream != null
-    };
-    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
-  };
-  modelList = async (context) => {
-    return loadModelsList(context.AZURE_CHAT_MODELS_LIST);
-  };
-}
-class AzureImageAI extends AzureBase {
-  modelKey = "AZURE_DALLE_API";
-  enable = (context) => {
-    return !!(context.AZURE_API_KEY && context.AZURE_DALLE_API);
-  };
-  model = (ctx) => {
-    return this.modelFromURI(ctx.AZURE_DALLE_API);
-  };
+  modelKey = getAgentUserConfigFieldName("AZURE_IMAGE_MODEL");
+  enable = (ctx) => !!(ctx.AZURE_API_KEY && ctx.AZURE_RESOURCE_NAME);
+  model = (ctx) => ctx.AZURE_IMAGE_MODEL;
+  modelList = (ctx) => Promise.resolve([ctx.AZURE_IMAGE_MODEL]);
   request = async (prompt, context) => {
-    const url = `https://${context.AZURE_RESOURCE_NAME}.openai.azure.com/openai/deployments/${context.AZURE_CHAT_MODEL}/images/generations?api-version=${context.AZURE_API_VERSION}`;
-    const header = {
-      "Content-Type": "application/json",
-      "api-key": context.AZURE_API_KEY || ""
-    };
+    const url = `https://${context.AZURE_RESOURCE_NAME}.openai.azure.com/openai/deployments/${context.AZURE_IMAGE_MODEL}/images/generations?api-version=${context.AZURE_API_VERSION}`;
+    const header = azureHeader(context);
     const body = {
       prompt,
       n: 1,
@@ -1551,23 +1636,16 @@ class AzureImageAI extends AzureBase {
 }
 class Cohere {
   name = "cohere";
-  modelKey = "COHERE_CHAT_MODEL";
-  enable = (context) => {
-    return !!context.COHERE_API_KEY;
-  };
-  model = (ctx) => {
-    return ctx.COHERE_CHAT_MODEL;
-  };
+  modelKey = getAgentUserConfigFieldName("COHERE_CHAT_MODEL");
+  enable = (ctx) => !!ctx.COHERE_API_KEY;
+  model = (ctx) => ctx.COHERE_CHAT_MODEL;
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
     const url = `${context.COHERE_API_BASE}/chat`;
-    const header = {
-      "Authorization": `Bearer ${context.COHERE_API_KEY}`,
-      "Content-Type": "application/json",
-      "Accept": onStream !== null ? "text/event-stream" : "application/json"
-    };
+    const header = bearerHeader(context.COHERE_API_KEY, onStream !== null);
     const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
+      ...context.COHERE_CHAT_EXTRA_PARAMS || {},
+      messages: await renderOpenAIMessages(prompt, messages, null),
       model: context.COHERE_CHAT_MODEL,
       stream: onStream != null
     };
@@ -1590,7 +1668,7 @@ class Cohere {
     }
     return loadModelsList(context.COHERE_CHAT_MODELS_LIST, async (url) => {
       const data = await fetch(url, {
-        headers: { Authorization: `Bearer ${context.COHERE_API_KEY}` }
+        headers: bearerHeader(context.COHERE_API_KEY)
       }).then((res) => res.json());
       return data.models?.filter((model) => model.endpoints?.includes("chat")).map((model) => model.name) || [];
     });
@@ -1598,28 +1676,17 @@ class Cohere {
 }
 class Gemini {
   name = "gemini";
-  modelKey = "GOOGLE_COMPLETIONS_MODEL";
-  enable = (context) => {
-    return !!context.GOOGLE_API_KEY;
-  };
-  model = (ctx) => {
-    return ctx.GOOGLE_COMPLETIONS_MODEL;
-  };
-  request = async (params, context, onStream) => {
-    const { prompt, messages } = params;
-    const url = `${context.GOOGLE_API_BASE}/openai/chat/completions`;
-    const header = {
-      "Authorization": `Bearer ${context.GOOGLE_API_KEY}`,
-      "Content-Type": "application/json",
-      "Accept": onStream !== null ? "text/event-stream" : "application/json"
-    };
-    const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
-      model: context.GOOGLE_COMPLETIONS_MODEL,
-      stream: onStream != null
-    };
-    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
-  };
+  modelKey = getAgentUserConfigFieldName("GOOGLE_COMPLETIONS_MODEL");
+  fieldGetter = agentConfigFieldGetter({
+    base: "GOOGLE_API_BASE",
+    key: "GOOGLE_API_KEY",
+    model: "GOOGLE_CHAT_MODEL",
+    modelsList: "GOOGLE_CHAT_MODELS_LIST",
+    extraParams: "GOOGLE_CHAT_EXTRA_PARAMS"
+  });
+  enable = createAgentEnable(this.fieldGetter);
+  model = createAgentModel(this.fieldGetter);
+  request = createOpenAIRequest(defaultOpenAIRequestBuilder(this.fieldGetter, "/openai/chat/completions", [ImageSupportFormat.BASE64]));
   modelList = async (context) => {
     if (context.GOOGLE_CHAT_MODELS_LIST === "") {
       context.GOOGLE_CHAT_MODELS_LIST = `${context.GOOGLE_API_BASE}/models`;
@@ -1630,79 +1697,94 @@ class Gemini {
     });
   };
 }
-class Mistral {
-  name = "mistral";
-  modelKey = "MISTRAL_CHAT_MODEL";
-  enable = (context) => {
-    return !!context.MISTRAL_API_KEY;
-  };
-  model = (ctx) => {
-    return ctx.MISTRAL_CHAT_MODEL;
-  };
+function openAIApiKey(context) {
+  const length = context.OPENAI_API_KEY.length;
+  return context.OPENAI_API_KEY[Math.floor(Math.random() * length)];
+}
+class OpenAI {
+  name = "openai";
+  modelKey = getAgentUserConfigFieldName("OPENAI_CHAT_MODEL");
+  enable = (ctx) => ctx.OPENAI_API_KEY.length > 0;
+  model = (ctx) => ctx.OPENAI_CHAT_MODEL;
+  modelList = (ctx) => loadOpenAIModelList(ctx.OPENAI_CHAT_MODELS_LIST, ctx.OPENAI_API_BASE, bearerHeader(openAIApiKey(ctx)));
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
-    const url = `${context.MISTRAL_API_BASE}/chat/completions`;
-    const header = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${context.MISTRAL_API_KEY}`
-    };
+    const url = `${context.OPENAI_API_BASE}/chat/completions`;
+    const header = bearerHeader(openAIApiKey(context));
     const body = {
-      model: context.MISTRAL_CHAT_MODEL,
-      messages: await renderOpenAIMessages(prompt, messages),
+      ...context.OPENAI_API_EXTRA_PARAMS || {},
+      model: context.OPENAI_CHAT_MODEL,
+      messages: await renderOpenAIMessages(prompt, messages, [ImageSupportFormat.URL, ImageSupportFormat.BASE64]),
       stream: onStream != null
     };
-    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream));
+    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, null));
   };
-  modelList = async (context) => {
-    if (context.MISTRAL_CHAT_MODELS_LIST === "") {
-      context.MISTRAL_CHAT_MODELS_LIST = `${context.MISTRAL_API_BASE}/models`;
+}
+class Dalle {
+  name = "openai";
+  modelKey = getAgentUserConfigFieldName("DALL_E_MODEL");
+  enable = (ctx) => ctx.OPENAI_API_KEY.length > 0;
+  model = (ctx) => ctx.DALL_E_MODEL;
+  modelList = (ctx) => loadModelsList(ctx.DALL_E_MODELS_LIST);
+  request = async (prompt, context) => {
+    const url = `${context.OPENAI_API_BASE}/images/generations`;
+    const header = bearerHeader(openAIApiKey(context));
+    const body = {
+      prompt,
+      n: 1,
+      size: context.DALL_E_IMAGE_SIZE,
+      model: context.DALL_E_MODEL
+    };
+    if (body.model === "dall-e-3") {
+      body.quality = context.DALL_E_IMAGE_QUALITY;
+      body.style = context.DALL_E_IMAGE_STYLE;
     }
-    return loadModelsList(context.MISTRAL_CHAT_MODELS_LIST, async (url) => {
-      const data = await fetch(url, {
-        headers: { Authorization: `Bearer ${context.MISTRAL_API_KEY}` }
-      }).then((res) => res.json());
-      return data.data?.map((model) => model.id) || [];
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(body)
+    }).then((res) => res.json());
+    if (resp.error?.message) {
+      throw new Error(resp.error.message);
+    }
+    return resp?.data?.at(0)?.url;
+  };
+}
+function isWorkerAIEnable(context) {
+  if (ENV.AI_BINDING) {
+    return true;
+  }
+  return !!(context.CLOUDFLARE_ACCOUNT_ID && context.CLOUDFLARE_TOKEN);
+}
+function loadWorkersModelList(task, loader) {
+  return async (context) => {
+    let uri = loader(context);
+    if (uri === "") {
+      const id = context.CLOUDFLARE_ACCOUNT_ID;
+      const taskEncoded = encodeURIComponent(task);
+      uri = `https://api.cloudflare.com/client/v4/accounts/${id}/ai/models/search?task=${taskEncoded}`;
+    }
+    return loadModelsList(uri, async (url) => {
+      const header = {
+        Authorization: `Bearer ${context.CLOUDFLARE_TOKEN}`
+      };
+      const data = await fetch(url, { headers: header }).then((res) => res.json());
+      return data.result?.map((model) => model.name) || [];
     });
   };
 }
-class WorkerBase {
+class WorkersChat {
   name = "workers";
-  run = async (model, body, id, token) => {
-    return await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${id}/ai/run/${model}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        method: "POST",
-        body: JSON.stringify(body)
-      }
-    );
-  };
-  enable = (context) => {
-    return !!(context.CLOUDFLARE_ACCOUNT_ID && context.CLOUDFLARE_TOKEN);
-  };
-}
-class WorkersChat extends WorkerBase {
-  modelKey = "WORKERS_CHAT_MODEL";
-  model = (ctx) => {
-    return ctx.WORKERS_CHAT_MODEL;
-  };
-  render = (item) => {
-    return {
-      role: item.role,
-      content: item.content
-    };
-  };
+  modelKey = getAgentUserConfigFieldName("WORKERS_CHAT_MODEL");
+  enable = isWorkerAIEnable;
+  model = (ctx) => ctx.WORKERS_CHAT_MODEL;
+  modelList = loadWorkersModelList("Text Generation", (ctx) => ctx.WORKERS_CHAT_MODELS_LIST);
   request = async (params, context, onStream) => {
     const { prompt, messages } = params;
-    const id = context.CLOUDFLARE_ACCOUNT_ID;
-    const token = context.CLOUDFLARE_TOKEN;
     const model = context.WORKERS_CHAT_MODEL;
-    const url = `https://api.cloudflare.com/client/v4/accounts/${id}/ai/run/${model}`;
-    const header = {
-      Authorization: `Bearer ${token}`
-    };
     const body = {
-      messages: await renderOpenAIMessages(prompt, messages),
+      ...context.WORKERS_CHAT_EXTRA_PARAMS || {},
+      messages: await renderOpenAIMessages(prompt, messages, null),
       stream: onStream !== null
     };
     const options = {};
@@ -1715,52 +1797,90 @@ class WorkersChat extends WorkerBase {
     options.errorExtractor = function(data) {
       return data?.errors?.at(0)?.message;
     };
-    return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, options));
-  };
-  modelList = async (context) => {
-    if (context.WORKERS_CHAT_MODELS_LIST === "") {
+    if (ENV.AI_BINDING) {
+      const answer = await ENV.AI_BINDING.run(model, body);
+      const response = WorkersChat.outputToResponse(answer, onStream !== null);
+      return convertStringToResponseMessages(mapResponseToAnswer(response, new AbortController(), options, onStream));
+    } else if (context.CLOUDFLARE_ACCOUNT_ID && context.CLOUDFLARE_TOKEN) {
       const id = context.CLOUDFLARE_ACCOUNT_ID;
-      context.WORKERS_CHAT_MODELS_LIST = `https://api.cloudflare.com/client/v4/accounts/${id}/ai/models/search?task=Text%20Generation`;
+      const token = context.CLOUDFLARE_TOKEN;
+      const url = `https://api.cloudflare.com/client/v4/accounts/${id}/ai/run/${model}`;
+      const header = bearerHeader(token, onStream !== null);
+      return convertStringToResponseMessages(requestChatCompletions(url, header, body, onStream, options));
+    } else {
+      throw new Error("Cloudflare account ID and token are required");
     }
-    return loadModelsList(context.WORKERS_CHAT_MODELS_LIST, async (url) => {
-      const header = {
-        Authorization: `Bearer ${context.CLOUDFLARE_TOKEN}`
-      };
-      const data = await fetch(url, { headers: header }).then((res) => res.json());
-      return data.result?.map((model) => model.name) || [];
-    });
   };
+  static outputToResponse(output, stream) {
+    if (stream && output instanceof ReadableStream) {
+      return new Response(output, {
+        headers: { "content-type": "text/event-stream" }
+      });
+    } else {
+      return Response.json({ result: output });
+    }
+  }
 }
-class WorkersImage extends WorkerBase {
-  modelKey = "WORKERS_IMAGE_MODEL";
-  model = (ctx) => {
-    return ctx.WORKERS_IMAGE_MODEL;
-  };
+class WorkersImage {
+  name = "workers";
+  modelKey = getAgentUserConfigFieldName("WORKERS_IMAGE_MODEL");
+  enable = isWorkerAIEnable;
+  model = (ctx) => ctx.WORKERS_IMAGE_MODEL;
+  modelList = loadWorkersModelList("Text-to-Image", (ctx) => ctx.WORKERS_IMAGE_MODELS_LIST);
   request = async (prompt, context) => {
-    const id = context.CLOUDFLARE_ACCOUNT_ID;
-    const token = context.CLOUDFLARE_TOKEN;
-    if (!id || !token) {
-      throw new Error("Cloudflare account ID or token is not set");
+    if (ENV.AI_BINDING) {
+      const answer = await ENV.AI_BINDING.run(context.WORKERS_IMAGE_MODEL, { prompt });
+      const raw = WorkersImage.outputToResponse(answer);
+      return await WorkersImage.responseToImage(raw);
+    } else if (context.CLOUDFLARE_ACCOUNT_ID && context.CLOUDFLARE_TOKEN) {
+      const id = context.CLOUDFLARE_ACCOUNT_ID;
+      const token = context.CLOUDFLARE_TOKEN;
+      const raw = await WorkersImage.fetch(context.WORKERS_IMAGE_MODEL, { prompt }, id, token);
+      return await WorkersImage.responseToImage(raw);
+    } else {
+      throw new Error("Cloudflare account ID and token are required");
     }
-    const raw = await this.run(context.WORKERS_IMAGE_MODEL, { prompt }, id, token);
-    if (isJsonResponse(raw)) {
-      const { result } = await raw.json();
+  };
+  static outputToResponse(output) {
+    if (output instanceof ReadableStream) {
+      return new Response(output, {
+        headers: {
+          "content-type": "image/jpg"
+        }
+      });
+    } else {
+      return Response.json({ result: output });
+    }
+  }
+  static async responseToImage(output) {
+    if (isJsonResponse(output)) {
+      const { result } = await output.json();
       const image = result?.image;
       if (typeof image !== "string") {
         throw new TypeError("Invalid image response");
       }
-      return base64StringToBlob(image);
+      return WorkersImage.base64StringToBlob(image);
     }
-    return await raw.blob();
-  };
-}
-async function base64StringToBlob(base64String) {
-  if (typeof Buffer !== "undefined") {
-    const buffer = Buffer.from(base64String, "base64");
-    return new Blob([buffer], { type: "image/png" });
-  } else {
-    const uint8Array = Uint8Array.from(atob(base64String), (c) => c.charCodeAt(0));
-    return new Blob([uint8Array], { type: "image/png" });
+    return await output.blob();
+  }
+  static async base64StringToBlob(base64String) {
+    if (typeof Buffer !== "undefined") {
+      const buffer = Buffer.from(base64String, "base64");
+      return new Blob([buffer], { type: "image/png" });
+    } else {
+      const uint8Array = Uint8Array.from(atob(base64String), (c) => c.charCodeAt(0));
+      return new Blob([uint8Array], { type: "image/png" });
+    }
+  }
+  static async fetch(model, body, id, token) {
+    return await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${id}/ai/run/${model}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        method: "POST",
+        body: JSON.stringify(body)
+      }
+    );
   }
 }
 const CHAT_AGENTS = [
@@ -1770,7 +1890,9 @@ const CHAT_AGENTS = [
   new WorkersChat(),
   new Cohere(),
   new Gemini(),
-  new Mistral()
+  new Mistral(),
+  new DeepSeek(),
+  new Gorq()
 ];
 function loadChatLLM(context) {
   for (const llm of CHAT_AGENTS) {
@@ -1863,7 +1985,7 @@ async function requestCompletionsFromLLM(params, context, agent, modifier, onStr
     throw new Error("Message is empty");
   }
   const llmParams = {
-    prompt: context.USER_CONFIG.SYSTEM_INIT_MESSAGE || void 0,
+    prompt: context.USER_CONFIG.SYSTEM_INIT_MESSAGE || undefined,
     messages: [...history, params]
   };
   const { text, responses } = await agent.request(llmParams, context.USER_CONFIG, onStream);
@@ -1884,14 +2006,40 @@ async function requestCompletionsFromLLM(params, context, agent, modifier, onStr
   return text;
 }
 class AgentListCallbackQueryHandler {
-  prefix = "al:";
+  prefix;
+  changeAgentPrefix;
+  agentLoader;
   needAuth = TELEGRAM_AUTH_CHECKER.shareModeGroup;
+  constructor(prefix, changeAgentPrefix, agentLoader) {
+    this.prefix = prefix;
+    this.changeAgentPrefix = changeAgentPrefix;
+    this.agentLoader = agentLoader;
+    this.createKeyboard = this.createKeyboard.bind(this);
+  }
+  static Chat() {
+    return new AgentListCallbackQueryHandler("al:", "ca:", () => {
+      return CHAT_AGENTS.filter((agent) => agent.enable(ENV.USER_CONFIG)).map((agent) => agent.name);
+    });
+  }
+  static Image() {
+    return new AgentListCallbackQueryHandler("ial:", "ica:", () => {
+      return IMAGE_AGENTS.filter((agent) => agent.enable(ENV.USER_CONFIG)).map((agent) => agent.name);
+    });
+  }
   handle = async (query, data, context) => {
-    if (!query.message) {
-      throw new Error("no message");
-    }
-    const names = CHAT_AGENTS.filter((agent) => agent.enable(ENV.USER_CONFIG)).map((agent) => agent.name);
+    const names = this.agentLoader();
     const sender = MessageSender.fromCallbackQuery(context.SHARE_CONTEXT.botToken, query);
+    const params = {
+      chat_id: query.message?.chat.id || 0,
+      message_id: query.message?.message_id || 0,
+      text: ENV.I18N.callback_query.select_provider,
+      reply_markup: {
+        inline_keyboard: this.createKeyboard(names)
+      }
+    };
+    return sender.editRawMessage(params);
+  };
+  createKeyboard(names) {
     const keyboards = [];
     for (let i = 0; i < names.length; i += 2) {
       const row = [];
@@ -1902,46 +2050,89 @@ class AgentListCallbackQueryHandler {
         }
         row.push({
           text: names[index],
-          callback_data: `ca:${JSON.stringify([names[index], 0])}`
+          callback_data: `${this.changeAgentPrefix}${JSON.stringify([names[index], 0])}`
         });
       }
       keyboards.push(row);
     }
-    const params = {
-      chat_id: query.message.chat.id,
-      message_id: query.message.message_id,
-      text: ENV.I18N.callback_query.select_provider,
-      reply_markup: {
-        inline_keyboard: keyboards
-      }
-    };
-    return sender.editRawMessage(params);
+    return keyboards;
+  }
+}
+function changeChatAgentType(conf, agent) {
+  return {
+    ...conf,
+    AI_PROVIDER: agent
   };
 }
+function changeImageAgentType(conf, agent) {
+  return {
+    ...conf,
+    AI_IMAGE_PROVIDER: agent
+  };
+}
+function loadAgentContext(query, data, context, prefix, agentLoader, changeAgentType) {
+  if (!query.message) {
+    throw new Error("no message");
+  }
+  const sender = MessageSender.fromCallbackQuery(context.SHARE_CONTEXT.botToken, query);
+  const params = JSON.parse(data.substring(prefix.length));
+  const agent = Array.isArray(params) ? params.at(0) : null;
+  if (!agent) {
+    throw new Error(`agent not found: ${agent}`);
+  }
+  const conf = changeAgentType(ENV.USER_CONFIG, agent);
+  const theAgent = agentLoader(conf);
+  if (!theAgent?.modelKey) {
+    throw new Error(`modelKey not found: ${agent}`);
+  }
+  return { sender, params, agent: theAgent, conf };
+}
 class ModelListCallbackQueryHandler {
-  prefix = "ca:";
+  prefix;
+  agentListPrefix;
+  changeModelPrefix;
+  agentLoader;
+  changeAgentType;
   needAuth = TELEGRAM_AUTH_CHECKER.shareModeGroup;
+  constructor(prefix, agentListPrefix, changeModelPrefix, agentLoader, changeAgentType) {
+    this.prefix = prefix;
+    this.agentListPrefix = agentListPrefix;
+    this.changeModelPrefix = changeModelPrefix;
+    this.agentLoader = agentLoader;
+    this.changeAgentType = changeAgentType;
+    this.createKeyboard = this.createKeyboard.bind(this);
+  }
+  static Chat() {
+    return new ModelListCallbackQueryHandler("ca:", "al:", "cm:", loadChatLLM, changeChatAgentType);
+  }
+  static Image() {
+    return new ModelListCallbackQueryHandler("ica:", "ial:", "icm:", loadImageGen, changeImageAgentType);
+  }
   async handle(query, data, context) {
-    if (!query.message) {
-      throw new Error("no message");
-    }
-    const sender = MessageSender.fromCallbackQuery(context.SHARE_CONTEXT.botToken, query);
-    const [agent, page] = JSON.parse(data.substring(this.prefix.length));
-    const conf = {
-      ...ENV.USER_CONFIG,
-      AI_PROVIDER: agent
+    const { sender, params, agent: theAgent, conf } = loadAgentContext(query, data, context, this.prefix, this.agentLoader, this.changeAgentType);
+    const [agent, page] = params;
+    const models = await theAgent.modelList(conf);
+    const message = {
+      chat_id: query.message?.chat.id || 0,
+      message_id: query.message?.message_id || 0,
+      text: `${agent} | ${ENV.I18N.callback_query.select_model}`,
+      reply_markup: {
+        inline_keyboard: await this.createKeyboard(models, agent, page)
+      }
     };
-    const chatAgent = loadChatLLM(conf);
-    if (!chatAgent) {
-      throw new Error(`agent not found: ${agent}`);
-    }
-    const models = await chatAgent.modelList(conf);
+    return sender.editRawMessage(message);
+  }
+  async createKeyboard(models, agent, page) {
     const keyboard = [];
     const maxRow = 10;
     const maxCol = Math.max(1, Math.min(5, ENV.MODEL_LIST_COLUMNS));
     const maxPage = Math.ceil(models.length / maxRow / maxCol);
     let currentRow = [];
     for (let i = page * maxRow * maxCol; i < models.length; i++) {
+      currentRow.push({
+        text: models[i],
+        callback_data: `${this.changeModelPrefix}${JSON.stringify([agent, models[i]])}`
+      });
       if (i % maxCol === 0) {
         keyboard.push(currentRow);
         currentRow = [];
@@ -1949,10 +2140,6 @@ class ModelListCallbackQueryHandler {
       if (keyboard.length >= maxRow) {
         break;
       }
-      currentRow.push({
-        text: models[i],
-        callback_data: `cm:${JSON.stringify([agent, models[i]])}`
-      });
     }
     if (currentRow.length > 0) {
       keyboard.push(currentRow);
@@ -1961,73 +2148,78 @@ class ModelListCallbackQueryHandler {
     keyboard.push([
       {
         text: "<",
-        callback_data: `ca:${JSON.stringify([agent, Math.max(page - 1, 0)])}`
+        callback_data: `${this.prefix}${JSON.stringify([agent, Math.max(page - 1, 0)])}`
       },
       {
         text: `${page + 1}/${maxPage}`,
-        callback_data: `ca:${JSON.stringify([agent, page])}`
+        callback_data: `${this.prefix}${JSON.stringify([agent, page])}`
       },
       {
         text: ">",
-        callback_data: `ca:${JSON.stringify([agent, Math.min(page + 1, maxPage - 1)])}`
+        callback_data: `${this.prefix}${JSON.stringify([agent, Math.min(page + 1, maxPage - 1)])}`
       },
       {
         text: "⇤",
-        callback_data: `al:`
+        callback_data: this.agentListPrefix
       }
     ]);
     if (models.length > (page + 1) * maxRow * maxCol) {
       currentRow.push();
     }
     keyboard.push(currentRow);
-    const message = {
-      chat_id: query.message.chat.id,
-      message_id: query.message.message_id,
-      text: `${agent}  ${ENV.I18N.callback_query.select_model}`,
-      reply_markup: {
-        inline_keyboard: keyboard
-      }
-    };
-    return sender.editRawMessage(message);
+    return keyboard;
   }
 }
+function changeChatAgentModel(agent, modelKey, model) {
+  return {
+    AI_PROVIDER: agent,
+    [modelKey]: model
+  };
+}
+function changeImageAgentModel(agent, modelKey, model) {
+  return {
+    AI_IMAGE_PROVIDER: agent,
+    [modelKey]: model
+  };
+}
 class ModelChangeCallbackQueryHandler {
-  prefix = "cm:";
+  prefix;
+  agentLoader;
+  changeAgentType;
+  createAgentChange;
   needAuth = TELEGRAM_AUTH_CHECKER.shareModeGroup;
+  constructor(prefix, agentLoader, changeAgentType, createAgentChange) {
+    this.prefix = prefix;
+    this.agentLoader = agentLoader;
+    this.changeAgentType = changeAgentType;
+    this.createAgentChange = createAgentChange;
+  }
+  static Chat() {
+    return new ModelChangeCallbackQueryHandler("cm:", loadChatLLM, changeChatAgentType, changeChatAgentModel);
+  }
+  static Image() {
+    return new ModelChangeCallbackQueryHandler("icm:", loadImageGen, changeImageAgentType, changeImageAgentModel);
+  }
   async handle(query, data, context) {
-    if (!query.message) {
-      throw new Error("no message");
-    }
-    const sender = MessageSender.fromCallbackQuery(context.SHARE_CONTEXT.botToken, query);
-    const [agent, model] = JSON.parse(data.substring(this.prefix.length));
-    const conf = {
-      ...ENV.USER_CONFIG,
-      AI_PROVIDER: agent
-    };
-    const chatAgent = loadChatLLM(conf);
-    if (!agent) {
-      throw new Error(`agent not found: ${agent}`);
-    }
-    if (!chatAgent?.modelKey) {
-      throw new Error(`modelKey not found: ${agent}`);
-    }
-    await context.execChangeAndSave({
-      AI_PROVIDER: agent,
-      [chatAgent.modelKey]: model
-    });
+    const { sender, params, agent: theAgent } = loadAgentContext(query, data, context, this.prefix, this.agentLoader, this.changeAgentType);
+    const [agent, model] = params;
+    await context.execChangeAndSave(this.createAgentChange(agent, theAgent.modelKey, model));
     console.log("Change model:", agent, model);
     const message = {
-      chat_id: query.message.chat.id,
-      message_id: query.message.message_id,
+      chat_id: query.message?.chat.id || 0,
+      message_id: query.message?.message_id || 0,
       text: `${ENV.I18N.callback_query.change_model} ${agent} > ${model}`
     };
     return sender.editRawMessage(message);
   }
 }
 const QUERY_HANDLERS = [
-  new AgentListCallbackQueryHandler(),
-  new ModelListCallbackQueryHandler(),
-  new ModelChangeCallbackQueryHandler()
+  AgentListCallbackQueryHandler.Chat(),
+  AgentListCallbackQueryHandler.Image(),
+  ModelListCallbackQueryHandler.Chat(),
+  ModelListCallbackQueryHandler.Image(),
+  ModelChangeCallbackQueryHandler.Chat(),
+  ModelChangeCallbackQueryHandler.Image()
 ];
 async function handleCallbackQuery(callbackQuery, context) {
   const sender = MessageSender.fromCallbackQuery(context.SHARE_CONTEXT.botToken, callbackQuery);
@@ -2157,18 +2349,33 @@ function extractImageFileID(message) {
   return null;
 }
 async function extractUserMessageItem(message, context) {
-  const text = message.text || message.caption || "";
+  let text = message.text || message.caption || "";
+  const urls = await extractImageURL(extractImageFileID(message), context).then((u) => u ? [u] : []);
+  if (ENV.EXTRA_MESSAGE_CONTEXT && message.reply_to_message && message.reply_to_message.from && `${message.reply_to_message.from.id}` !== `${context.SHARE_CONTEXT.botId}`) {
+    const extraText = message.reply_to_message.text || message.reply_to_message.caption || "";
+    if (extraText) {
+      text = `${text}
+The following is the referenced context: ${extraText}`;
+    }
+    if (ENV.EXTRA_MESSAGE_MEDIA_COMPATIBLE.includes("image") && message.reply_to_message.photo) {
+      const url = await extractImageURL(extractImageFileID(message.reply_to_message), context);
+      if (url) {
+        urls.push(url);
+      }
+    }
+  }
   const params = {
     role: "user",
     content: text
   };
-  const url = await extractImageURL(extractImageFileID(message), context);
-  if (url) {
+  if (urls.length > 0) {
     const contents = new Array();
     if (text) {
       contents.push({ type: "text", text });
     }
-    contents.push({ type: "image", image: url });
+    for (const url of urls) {
+      contents.push({ type: "image", image: url });
+    }
     params.content = contents;
   }
   return params;
@@ -2195,7 +2402,7 @@ function evaluateExpression(expr, localData) {
     }, localData);
   } catch (error) {
     console.error(`Error evaluating expression: ${expr}`, error);
-    return void 0;
+    return undefined;
   }
 }
 function interpolate(template, data, formatter) {
@@ -2219,7 +2426,7 @@ function interpolate(template, data, formatter) {
     tmpl = tmpl.replace(INTERPOLATE_CONDITION_REGEXP, (_, alias, condition, trueBlock, falseBlock) => processConditional(condition, trueBlock, falseBlock, localData));
     return tmpl.replace(INTERPOLATE_VARIABLE_REGEXP, (_, expr) => {
       const value = evaluateExpression(expr, localData);
-      if (value === void 0) {
+      if (value === undefined) {
         return `{{${expr}}}`;
       }
       if (formatter) {
@@ -2231,7 +2438,7 @@ function interpolate(template, data, formatter) {
   return processTemplate(template, data);
 }
 function interpolateObject(obj, data) {
-  if (obj === null || obj === void 0) {
+  if (obj === null || obj === undefined) {
     return null;
   }
   if (typeof obj === "string") {
@@ -2323,9 +2530,9 @@ function formatInput(input, type) {
   if (type === "json") {
     return JSON.parse(input);
   } else if (type === "space-separated") {
-    return input.split(/\s+/);
+    return input.trim().split(" ").filter(Boolean);
   } else if (type === "comma-separated") {
-    return input.split(/\s*,\s*/);
+    return input.split(",").map((item) => item.trim()).filter(Boolean);
   } else {
     return input;
   }
@@ -2336,7 +2543,23 @@ class ImgCommandHandler {
   handle = async (message, subcommand, context) => {
     const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
     if (subcommand === "") {
-      return sender.sendPlainText(ENV.I18N.command.help.img);
+      const imgAgent = loadImageGen(context.USER_CONFIG);
+      const text = `${ENV.I18N.command.help.img}
+
+${imgAgent?.name || "Nan"} | ${imgAgent?.model(context.USER_CONFIG) || "Nan"}`;
+      const params = {
+        chat_id: message.chat.id,
+        text,
+        reply_markup: {
+          inline_keyboard: [[
+            {
+              text: ENV.I18N.callback_query.open_model_list,
+              callback_data: "ial:"
+            }
+          ]]
+        }
+      };
+      return sender.sendRawMessage(params);
     }
     try {
       const api = createTelegramBotAPI(context.SHARE_CONTEXT.botToken);
@@ -2537,29 +2760,25 @@ class SystemCommandHandler {
       AI_IMAGE_PROVIDER: imageAgent?.name,
       [imageAgent?.modelKey || "AI_IMAGE_PROVIDER_NOT_FOUND"]: imageAgent?.model(context.USER_CONFIG)
     };
-    let msg = `AGENT: ${JSON.stringify(agent, null, 2)}
-`;
+    let msg = `<strong>AGENT</strong><pre>${JSON.stringify(agent, null, 2)}</pre>`;
     if (ENV.DEV_MODE) {
-      const shareCtx = { ...context.SHARE_CONTEXT };
-      shareCtx.botToken = "******";
-      context.USER_CONFIG.ANTHROPIC_API_KEY = "******";
-      context.USER_CONFIG.AZURE_API_KEY = "******";
-      context.USER_CONFIG.COHERE_API_KEY = "******";
-      context.USER_CONFIG.GOOGLE_API_KEY = "******";
-      context.USER_CONFIG.MISTRAL_API_KEY = "******";
-      context.USER_CONFIG.OPENAI_API_KEY = ["******"];
-      context.USER_CONFIG.CLOUDFLARE_ACCOUNT_ID = "******";
-      context.USER_CONFIG.CLOUDFLARE_TOKEN = "******";
       const config = ConfigMerger.trim(context.USER_CONFIG, ENV.LOCK_USER_CONFIG_KEYS);
-      msg = `<pre>
-${msg}`;
-      msg += `USER_CONFIG: ${JSON.stringify(config, null, 2)}
-`;
-      msg += `CHAT_CONTEXT: ${JSON.stringify(sender.context || {}, null, 2)}
-`;
-      msg += `SHARE_CONTEXT: ${JSON.stringify(shareCtx, null, 2)}
-`;
-      msg += "</pre>";
+      msg += `
+
+<strong>USER_CONFIG</strong><pre>${JSON.stringify(config, null, 2)}</pre>`;
+      const secretsSuffix = ["_API_KEY", "_TOKEN", "_ACCOUNT_ID"];
+      for (const key of Object.keys(context.USER_CONFIG)) {
+        if (secretsSuffix.some((suffix) => key.endsWith(suffix))) {
+          context.USER_CONFIG[key] = "******";
+        }
+      }
+      msg += `
+
+<strong>CHAT_CONTEXT</strong><pre>${JSON.stringify(sender.context || {}, null, 2)}</pre>`;
+      const shareCtx = { ...context.SHARE_CONTEXT, botToken: "******" };
+      msg += `
+
+<strong>SHARE_CONTEXT</strong><pre>${JSON.stringify(shareCtx, null, 2)}</pre>`;
     }
     return sender.sendRichText(msg, "HTML");
   };
@@ -2576,7 +2795,7 @@ class RedoCommandHandler {
       const historyCopy = structuredClone(history);
       while (true) {
         const data = historyCopy.pop();
-        if (data === void 0 || data === null) {
+        if (data === undefined || data === null) {
           break;
         } else if (data.role === "user") {
           nextMessage = data;
@@ -2603,9 +2822,10 @@ class ModelsCommandHandler {
   handle = async (message, subcommand, context) => {
     const sender = MessageSender.fromMessage(context.SHARE_CONTEXT.botToken, message);
     const chatAgent = loadChatLLM(context.USER_CONFIG);
+    const text = `${chatAgent?.name || "Nan"} | ${chatAgent?.model(context.USER_CONFIG) || "Nan"}`;
     const params = {
       chat_id: message.chat.id,
-      text: `${chatAgent?.name || "Nan"} | ${chatAgent?.model(context.USER_CONFIG) || "Nan"}`,
+      text,
       reply_markup: {
         inline_keyboard: [[
           {
@@ -3055,7 +3275,7 @@ class Router {
     return path.replace(/\/+(\/|$)/g, "$1");
   }
   createRouteRegex(path) {
-    return new RegExp(`^${path.replace(/(\/?\.?):(\w+)\+/g, "($1(?<$2>*))").replace(/(\/?\.?):(\w+)/g, "($1(?<$2>[^$1/]+?))").replace(/\./g, "\\.").replace(/(\/?)\*/g, "($1.*)?")}/*$`);
+    return new RegExp(`^${path.replace(/\\/g, "\\\\").replace(/(\/?\.?):(\w+)\+/g, "($1(?<$2>*))").replace(/(\/?\.?):(\w+)/g, "($1(?<$2>[^$1/]+?))").replace(/\./g, "\\.").replace(/(\/?)\*/g, "($1.*)?")}/*$`);
   }
   async fetch(request, ...args) {
     try {

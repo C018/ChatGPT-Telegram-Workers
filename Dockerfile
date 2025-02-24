@@ -1,16 +1,24 @@
-FROM node:alpine AS build
+FROM node:20-slim AS build
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack disable && npm install -g pnpm@latest
+
+COPY . /app
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN npm install -g pnpm
-COPY . .
-RUN pnpm install
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build:local
 
+FROM node:20-slim AS prod
 
-FROM node:alpine AS production
 WORKDIR /app
-COPY packages/apps/local/package.docker.json package.json
+
+COPY --from=build /app/packages/apps/local/dist/index.js /app/dist/index.js
+COPY --from=build /app/packages/apps/local/package-docker.json /app/package.json
+
 RUN npm install
-COPY --from=build /app/packages/apps/local/dist/index.js index.js
 EXPOSE 8787
-CMD ["npm", "run", "start"]
+
+CMD ["node", "/app/dist/index.js"]

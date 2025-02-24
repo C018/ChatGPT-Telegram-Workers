@@ -2,7 +2,7 @@
 
 > 如果你需要本地部署或者docker部署，请查看[本地部署](LOCAL.md)文档
 > 
-> 如果你需要部署到Vercel，请查看[Vercel部署示例](VERCEL)文档
+> 如果你需要部署到Vercel，请查看[Vercel部署示例](VERCEL.md)文档
 
 ## 视频教程
 
@@ -68,5 +68,5 @@
 ## 命令行部署
 1. 准备部署所需的 Telegram Bot Token 和 OpenAI API Key
 2. `mv wrangler-example.toml wrangler.toml`, 然后修改相应配置
-3. `yarn install`
-4. `yarn run deploy:build`
+3. `pnpm install`
+4. `pnpm run deploy:dist`

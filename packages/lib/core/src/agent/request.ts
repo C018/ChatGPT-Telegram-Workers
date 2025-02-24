@@ -27,12 +27,13 @@ function fixOpenAICompatibleOptions(options: SseChatCompatibleOptions | null): S
 }
 
 export function isJsonResponse(resp: Response): boolean {
-    return resp.headers.get('content-type')?.includes('json') || false;
+    const contentType = resp.headers.get('content-type');
+    return contentType?.toLowerCase().includes('application/json') ?? false;
 }
 
 export function isEventStreamResponse(resp: Response): boolean {
     const types = ['application/stream+json', 'text/event-stream'];
-    const content = resp.headers.get('content-type') || '';
+    const content = resp.headers.get('content-type')?.toLowerCase() || '';
     for (const type of types) {
         if (content.includes(type)) {
             return true;
@@ -41,7 +42,7 @@ export function isEventStreamResponse(resp: Response): boolean {
     return false;
 }
 
-export async function streamHandler<T>(stream: AsyncIterable<T>, contentExtractor: (data: T) => string | null, onStream: (text: string) => Promise<any>): Promise<string> {
+export async function streamHandler<T>(stream: AsyncIterable<T>, contentExtractor: (data: T) => string | null, onStream?: (text: string) => Promise<any>): Promise<string> {
     let contentFull = '';
     let lengthDelta = 0;
     let updateStep = 50;
@@ -64,7 +65,7 @@ export async function streamHandler<T>(stream: AsyncIterable<T>, contentExtracto
                 }
                 lengthDelta = 0;
                 updateStep += 20;
-                await onStream(`${contentFull}\n...`);
+                await onStream?.(`${contentFull}\n...`);
             }
         }
     } catch (e) {
@@ -73,28 +74,10 @@ export async function streamHandler<T>(stream: AsyncIterable<T>, contentExtracto
     return contentFull;
 }
 
-export async function requestChatCompletions(url: string, header: Record<string, string>, body: any, onStream: ChatStreamTextHandler | null, options: SseChatCompatibleOptions | null = null): Promise<string> {
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    let timeoutID = null;
-    if (ENV.CHAT_COMPLETE_API_TIMEOUT > 0) {
-        timeoutID = setTimeout(() => controller.abort(), ENV.CHAT_COMPLETE_API_TIMEOUT);
-    }
-
-    const resp = await fetch(url, {
-        method: 'POST',
-        headers: header,
-        body: JSON.stringify(body),
-        signal,
-    });
-    if (timeoutID) {
-        clearTimeout(timeoutID);
-    }
-
-    options = fixOpenAICompatibleOptions(options);
+export async function mapResponseToAnswer(resp: Response, controller: AbortController, options: SseChatCompatibleOptions | null, onStream: ((text: string) => Promise<any>) | null): Promise<string> {
+    options = fixOpenAICompatibleOptions(options || null);
     if (onStream && resp.ok && isEventStreamResponse(resp)) {
-        const stream = options.streamBuilder?.(resp, controller);
+        const stream = options.streamBuilder?.(resp, controller || new AbortController());
         if (!stream) {
             throw new Error('Stream builder error');
         }
@@ -113,4 +96,26 @@ export async function requestChatCompletions(url: string, header: Record<string,
     }
 
     return options.fullContentExtractor?.(result) || '';
+}
+
+export async function requestChatCompletions(url: string, header: Record<string, string>, body: any, onStream: ChatStreamTextHandler | null, options: SseChatCompatibleOptions | null): Promise<string> {
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    let timeoutID = null;
+    if (ENV.CHAT_COMPLETE_API_TIMEOUT > 0) {
+        timeoutID = setTimeout(() => controller.abort(), ENV.CHAT_COMPLETE_API_TIMEOUT);
+    }
+
+    const resp = await fetch(url, {
+        method: 'POST',
+        headers: header,
+        body: JSON.stringify(body),
+        signal,
+    });
+    if (timeoutID) {
+        clearTimeout(timeoutID);
+    }
+
+    return await mapResponseToAnswer(resp, controller, options, onStream);
 }

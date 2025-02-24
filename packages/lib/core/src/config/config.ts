@@ -1,3 +1,172 @@
+// -- 通用配置 --
+export class AgentShareConfig {
+    // AI提供商: auto, openai, azure, workers, gemini, mistral
+    AI_PROVIDER = 'auto';
+    // AI图片提供商: auto, openai, azure, workers
+    AI_IMAGE_PROVIDER = 'auto';
+    // 全局默认初始化消息
+    SYSTEM_INIT_MESSAGE: string | null = null;
+    // DEPRECATED: 全局默认初始化消息角色, 废弃此选项
+    // SYSTEM_INIT_MESSAGE_ROLE = 'system';
+}
+
+// -- Open AI 配置 --
+export class OpenAIConfig {
+    // OpenAI API Key
+    OPENAI_API_KEY: string[] = [];
+    // OpenAI的模型名称
+    OPENAI_CHAT_MODEL = 'gpt-4o-mini';
+    // OpenAI API BASE
+    OPENAI_API_BASE = 'https://api.openai.com/v1';
+    // OpenAI API Extra Params
+    OPENAI_API_EXTRA_PARAMS: Record<string, any> = {};
+    // OpenAI Chat Models List
+    OPENAI_CHAT_MODELS_LIST = '';
+}
+
+// -- DALLE 配置 --
+export class DallEConfig {
+    // DALL-E的模型名称
+    DALL_E_MODEL = 'dall-e-3';
+    // DALL-E图片尺寸
+    DALL_E_IMAGE_SIZE = '1024x1024';
+    // DALL-E图片质量
+    DALL_E_IMAGE_QUALITY = 'standard';
+    // DALL-E图片风格
+    DALL_E_IMAGE_STYLE = 'vivid';
+    // DALL-E Models List
+    DALL_E_MODELS_LIST = '["dall-e-3"]';
+}
+
+// -- AZURE 配置 --
+export class AzureConfig {
+    // Azure API Key
+    AZURE_API_KEY: string | null = null;
+    // Azure Resource Name
+    AZURE_RESOURCE_NAME: string | null = null;
+    // Azure Chat Model
+    AZURE_CHAT_MODEL: string = 'gpt-4o-mini';
+    // Azure Image Model
+    AZURE_IMAGE_MODEL: string = 'dall-e-3';
+    // Azure API version
+    AZURE_API_VERSION = '2024-06-01';
+    // Azure Chat Models List
+    AZURE_CHAT_MODELS_LIST = '';
+    // AZURE Chat API Extra Params
+    AZURE_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Workers 配置 --
+export class WorkersConfig {
+    // Cloudflare Account ID
+    CLOUDFLARE_ACCOUNT_ID: string | null = null;
+    // Cloudflare Token
+    CLOUDFLARE_TOKEN: string | null = null;
+    // Text Generation Model
+    WORKERS_CHAT_MODEL = '@cf/qwen/qwen1.5-7b-chat-awq';
+    // Text-to-Image Model
+    WORKERS_IMAGE_MODEL = '@cf/black-forest-labs/flux-1-schnell';
+    // Workers Chat Models List, When empty, will use the api to get the list
+    WORKERS_CHAT_MODELS_LIST = '';
+    // Workers Image Models List, When empty, will use the api to get the list
+    WORKERS_IMAGE_MODELS_LIST = '';
+    // Workers Chat API Extra Params
+    WORKERS_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Gemini 配置 --
+export class GeminiConfig {
+    // Google Gemini API Key
+    GOOGLE_API_KEY: string | null = null;
+    // Google Gemini API: https://ai.google.dev/gemini-api/docs/openai#rest
+    GOOGLE_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
+    // Google Gemini Model
+    GOOGLE_CHAT_MODEL = 'gemini-1.5-flash';
+    // Google Chat Models List
+    GOOGLE_CHAT_MODELS_LIST = '';
+    // Google Chat API Extra Params
+    GOOGLE_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Mistral 配置 --
+export class MistralConfig {
+    // Mistral api key
+    MISTRAL_API_KEY: string | null = null;
+    // Mistral api base
+    MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
+    // Mistral api model
+    MISTRAL_CHAT_MODEL = 'mistral-tiny';
+    // Mistral api chat models list
+    MISTRAL_CHAT_MODELS_LIST = '';
+    // Mistral Chat API Extra Params
+    MISTRAL_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Cohere 配置 --
+export class CohereConfig {
+    // Cohere api key
+    COHERE_API_KEY: string | null = null;
+    // Cohere api base
+    COHERE_API_BASE = 'https://api.cohere.com/v2';
+    // Cohere api model
+    COHERE_CHAT_MODEL = 'command-r-plus';
+    // Cohere api chat models list
+    COHERE_CHAT_MODELS_LIST = '';
+    // Cohere Chat API Extra Params
+    COHERE_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Anthropic 配置 --
+export class AnthropicConfig {
+    // Anthropic api key
+    ANTHROPIC_API_KEY: string | null = null;
+    // Anthropic api base
+    ANTHROPIC_API_BASE = 'https://api.anthropic.com/v1';
+    // Anthropic api model
+    ANTHROPIC_CHAT_MODEL = 'claude-3-5-haiku-latest';
+    // Anthropic api chat models list
+    ANTHROPIC_CHAT_MODELS_LIST = '';
+    // Anthropic Chat API Extra Params
+    ANTHROPIC_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- DeepSeek 配置 --
+export class DeepSeekConfig {
+    // DeepSeek api key
+    DEEPSEEK_API_KEY: string | null = null;
+    // DeepSeek api base
+    DEEPSEEK_API_BASE = 'https://api.deepseek.com';
+    // DeepSeek api model
+    DEEPSEEK_CHAT_MODEL = 'deepseek-chat';
+    // DeepSeek api chat models list
+    DEEPSEEK_CHAT_MODELS_LIST = '';
+    // DeepSeek Chat API Extra Params
+    DEEPSEEK_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+// -- Gorq 配置 --
+export class GorqConfig {
+    // Gorq api key
+    GORQ_API_KEY: string | null = null;
+    // Gorq api base
+    GORQ_API_BASE = 'https://api.groq.com/openai/v1';
+    // Gorq api model
+    GORQ_CHAT_MODEL = 'gorq-chat';
+    // Gorq api chat models list
+    GORQ_CHAT_MODELS_LIST = '';
+    // Gorq Chat API Extra Params
+    GORQ_CHAT_EXTRA_PARAMS: Record<string, any> = {};
+}
+
+type UserConfig = AgentShareConfig & OpenAIConfig & DallEConfig & AzureConfig & WorkersConfig & GeminiConfig & MistralConfig & CohereConfig & AnthropicConfig & DeepSeekConfig & GorqConfig;
+export type AgentUserConfigKey = keyof UserConfig;
+
+export class DefineKeys {
+    DEFINE_KEYS: AgentUserConfigKey[] = [];
+}
+
+export type AgentUserConfig = Record<string, any> & DefineKeys & UserConfig;
+
 // -- 只能通过环境变量覆盖的配置 --
 export class EnvironmentConfig {
     // 多语言支持
@@ -21,7 +190,7 @@ export class EnvironmentConfig {
     // 默认选择次低质量的图片
     TELEGRAM_PHOTO_SIZE_OFFSET = 1;
     // 向LLM优先传递图片方式：url, base64
-    TELEGRAM_IMAGE_TRANSFER_MODE = 'url';
+    TELEGRAM_IMAGE_TRANSFER_MODE = 'base64';
     // 模型列表列数
     MODEL_LIST_COLUMNS = 1;
 
@@ -32,15 +201,15 @@ export class EnvironmentConfig {
     // 白名单
     CHAT_WHITE_LIST: string[] = [];
     // 用户配置
-    LOCK_USER_CONFIG_KEYS = [
+    LOCK_USER_CONFIG_KEYS: AgentUserConfigKey[] = [
         // 默认为API BASE 防止被替换导致token 泄露
         'OPENAI_API_BASE',
-        'GOOGLE_COMPLETIONS_API',
+        'GOOGLE_API_BASE',
         'MISTRAL_API_BASE',
         'COHERE_API_BASE',
         'ANTHROPIC_API_BASE',
-        'AZURE_COMPLETIONS_API',
-        'AZURE_DALLE_API',
+        'DEEPSEEK_API_BASE',
+        'GORQ_API_BASE',
     ];
 
     // -- 群组相关 --
@@ -71,8 +240,10 @@ export class EnvironmentConfig {
     HIDE_COMMAND_BUTTONS: string[] = [];
     // 显示快捷回复按钮
     SHOW_REPLY_BUTTON = false;
-    // 而外引用消息开关
+    // 额外引用消息开关
     EXTRA_MESSAGE_CONTEXT = false;
+    // 额外引用多媒体消息特性: image
+    EXTRA_MESSAGE_MEDIA_COMPATIBLE = ['image'];
 
     // -- 模式开关 --
     //
@@ -84,124 +255,4 @@ export class EnvironmentConfig {
     DEBUG_MODE = false;
     // 开发模式
     DEV_MODE = false;
-}
-
-// -- 通用配置 --
-export class AgentShareConfig {
-    // AI提供商: auto, openai, azure, workers, gemini, mistral
-    AI_PROVIDER = 'auto';
-    // AI图片提供商: auto, openai, azure, workers
-    AI_IMAGE_PROVIDER = 'auto';
-    // 全局默认初始化消息
-    SYSTEM_INIT_MESSAGE: string | null = null;
-    // DEPRECATED: 全局默认初始化消息角色, 废弃此选项
-    // SYSTEM_INIT_MESSAGE_ROLE = 'system';
-}
-
-// -- Open AI 配置 --
-export class OpenAIConfig {
-    // OpenAI API Key
-    OPENAI_API_KEY: string[] = [];
-    // OpenAI的模型名称
-    OPENAI_CHAT_MODEL = 'gpt-4o-mini';
-    // OpenAI API BASE ``
-    OPENAI_API_BASE = 'https://api.openai.com/v1';
-    // OpenAI API Extra Params
-    OPENAI_API_EXTRA_PARAMS: Record<string, any> = {};
-    // OpenAI Chat Models List
-    OPENAI_CHAT_MODELS_LIST = '';
-}
-
-// -- DALLE 配置 --
-export class DallEConfig {
-    // DALL-E的模型名称
-    DALL_E_MODEL = 'dall-e-3';
-    // DALL-E图片尺寸
-    DALL_E_IMAGE_SIZE = '1024x1024';
-    // DALL-E图片质量
-    DALL_E_IMAGE_QUALITY = 'standard';
-    // DALL-E图片风格
-    DALL_E_IMAGE_STYLE = 'vivid';
-}
-
-// -- AZURE 配置 --
-export class AzureConfig {
-    // Azure API Key
-    AZURE_API_KEY: string | null = null;
-    // Azure Resource Name
-    AZURE_RESOURCE_NAME: string | null = null;
-    // Azure Chat Model
-    AZURE_CHAT_MODEL: string | null = null;
-    // Azure Image Model
-    AZURE_IMAGE_MODEL: string | null = null;
-    // Azure API version
-    AZURE_API_VERSION = '2024-06-01';
-    // Azure Chat Models List
-    AZURE_CHAT_MODELS_LIST = '[]';
-}
-
-// -- Workers 配置 --
-export class WorkersConfig {
-    // Cloudflare Account ID
-    CLOUDFLARE_ACCOUNT_ID: string | null = null;
-    // Cloudflare Token
-    CLOUDFLARE_TOKEN: string | null = null;
-    // Text Generation Model
-    WORKERS_CHAT_MODEL = '@cf/mistral/mistral-7b-instruct-v0.1 ';
-    // Text-to-Image Model
-    WORKERS_IMAGE_MODEL = '@cf/stabilityai/stable-diffusion-xl-base-1.0';
-    // Workers Chat Models List, When empty, will use the api to get the list
-    WORKERS_CHAT_MODELS_LIST = '';
-}
-
-// -- Gemini 配置 --
-export class GeminiConfig {
-    // Google Gemini API Key
-    GOOGLE_API_KEY: string | null = null;
-    // Google Gemini API: https://ai.google.dev/gemini-api/docs/openai#rest
-    GOOGLE_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
-    // Google Gemini Model
-    GOOGLE_COMPLETIONS_MODEL = 'gemini-1.5-flash';
-    // Google Chat Models List
-    GOOGLE_CHAT_MODELS_LIST = '';
-}
-
-// -- Mistral 配置 --
-export class MistralConfig {
-    // mistral api key
-    MISTRAL_API_KEY: string | null = null;
-    // mistral api base
-    MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
-    // mistral api model
-    MISTRAL_CHAT_MODEL = 'mistral-tiny';
-    // mistral api chat models list
-    MISTRAL_CHAT_MODELS_LIST = '';
-}
-
-// -- Cohere 配置 --
-export class CohereConfig {
-    // cohere api key
-    COHERE_API_KEY: string | null = null;
-    // cohere api base
-    COHERE_API_BASE = 'https://api.cohere.com/v2';
-    // cohere api model
-    COHERE_CHAT_MODEL = 'command-r-plus';
-    // cohere api chat models list
-    COHERE_CHAT_MODELS_LIST = '';
-}
-
-// -- Anthropic 配置 --
-export class AnthropicConfig {
-    // Anthropic api key
-    ANTHROPIC_API_KEY: string | null = null;
-    // Anthropic api base
-    ANTHROPIC_API_BASE = 'https://api.anthropic.com/v1';
-    // Anthropic api model
-    ANTHROPIC_CHAT_MODEL = 'claude-3-5-haiku-latest';
-    // Anthropic api chat models list
-    ANTHROPIC_CHAT_MODELS_LIST = `["claude-3-5-sonnet-latest", "claude-3-5-haiku-latest"]`;
-}
-
-export class DefineKeys {
-    DEFINE_KEYS: string[] = [];
 }

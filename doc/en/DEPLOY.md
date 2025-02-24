@@ -2,7 +2,7 @@
 
 > If you need local deployment or Docker deployment, please refer to the [Local Deployment](LOCAL.md) documentation.
 >
-> If you need to deploy to Vercel, please check the [Vercel deployment example](../cn/VERCEL) documentation.
+> If you need to deploy to Vercel, please check the [Vercel deployment example](VERCEL.md) documentation.
 
 
 ## Video tutorial
@@ -75,5 +75,5 @@ Thank [**科技小白堂**](https://www.youtube.com/@lipeng0820) for providing t
 
 1. Prepare the required Telegram Bot Token and OpenAI API Key
 2. `mv wrangler-example.toml wrangler.toml`, then modify the corresponding configuration
-3. `yarn install`
-4. `yarn run deploy:build`
+3. `pnpm install`
+4. `pnpm run deploy:dist`

@@ -12,14 +12,14 @@ export class DeepSeek extends OpenAICompatibilityAgent {
     }
 }
 
-export class Gorq extends OpenAICompatibilityAgent {
+export class Groq extends OpenAICompatibilityAgent {
     constructor() {
-        super('gorq', {
-            base: 'GORQ_API_BASE',
-            key: 'GORQ_API_KEY',
-            model: 'GORQ_CHAT_MODEL',
-            modelsList: 'GORQ_CHAT_MODELS_LIST',
-            extraParams: 'GORQ_CHAT_EXTRA_PARAMS',
+        super('groq', {
+            base: 'GROQ_API_BASE',
+            key: 'GROQ_API_KEY',
+            model: 'GROQ_CHAT_MODEL',
+            modelsList: 'GROQ_CHAT_MODELS_LIST',
+            extraParams: 'GROQ_CHAT_EXTRA_PARAMS',
         });
     }
 }
@@ -32,6 +32,18 @@ export class Mistral extends OpenAICompatibilityAgent {
             model: 'MISTRAL_CHAT_MODEL',
             modelsList: 'MISTRAL_CHAT_MODELS_LIST',
             extraParams: 'MISTRAL_CHAT_EXTRA_PARAMS',
+        });
+    }
+}
+
+export class XAi extends OpenAICompatibilityAgent {
+    constructor() {
+        super('xai', {
+            base: 'XAI_API_BASE',
+            key: 'XAI_API_KEY',
+            model: 'XAI_CHAT_MODEL',
+            modelsList: 'XAI_CHAT_MODELS_LIST',
+            extraParams: 'XAI_CHAT_EXTRA_PARAMS',
         });
     }
 }

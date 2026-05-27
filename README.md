@@ -53,13 +53,6 @@ You can customize the system initialization information so that your debugged pe
 - [telegram-bot-api-types](https://github.com/TBXark/telegram-bot-api-types)  Telegram Bot API SDK with 0 output after compilation, complete documentation, supports all APIs.
 
 
-## Special thanks
-
-![https://www.jetbrains.com/?from=tbxark](https://user-images.githubusercontent.com/9513891/236592683-1ea579cf-08ff-4703-b313-db038f62bab0.svg)
-
-Thanks for the open-source development license provided by [JetBrains](https://www.jetbrains.com/?from=tbxark).
-
-
 ## Contributors
 
 This project exists thanks to all the people who contribute. [Contribute](https://github.com/tbxark/ChatGPT-Telegram-Workers/graphs/contributors).

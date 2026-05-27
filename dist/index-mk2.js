@@ -223,8 +223,8 @@ class ConfigMerger {
     }
   }
 }
-const BUILD_TIMESTAMP = 1744994097;
-const BUILD_VERSION = "8203314";
+const BUILD_TIMESTAMP = 1761036146;
+const BUILD_VERSION = "87adca1";
 function createAgentUserConfig() {
   return Object.assign(
     {},
@@ -3462,7 +3462,11 @@ function getAugmentedNamespace(n) {
   var f = n.default;
 	if (typeof f == "function") {
 		var a = function a () {
-			if (this instanceof a) {
+			var isInstance = false;
+      try {
+        isInstance = this instanceof a;
+      } catch {}
+			if (isInstance) {
         return Reflect.construct(f, arguments, this.constructor);
 			}
 			return f.apply(this, arguments);
@@ -14077,6 +14081,18 @@ function requireDefinitions () {
 	return definitions;
 }
 
+var mdastUtilGfmTable = {};
+
+var hasRequiredMdastUtilGfmTable;
+
+function requireMdastUtilGfmTable () {
+	if (hasRequiredMdastUtilGfmTable) return mdastUtilGfmTable;
+	hasRequiredMdastUtilGfmTable = 1;
+	mdastUtilGfmTable.fromMarkdown = requireFromMarkdown$2();
+	mdastUtilGfmTable.toMarkdown = requireToMarkdown$2();
+	return mdastUtilGfmTable;
+}
+
 const __viteBrowserExternal = {};
 
 const __viteBrowserExternal$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -14114,8 +14130,8 @@ function requireUtils () {
 		switch (textType) {
 			case 'code':
 				return text
-					.replace(/`/g, '\\`')
 					.replace(/\\/g, '\\\\')
+					.replace(/`/g, '\\`')
 			case 'link':
 				return text
 					.replace(/\\/g, '\\\\')
@@ -14171,6 +14187,7 @@ function requireTelegramify () {
 	hasRequiredTelegramify = 1;
 	const defaultHandlers = requireHandle();
 	const phrasing = requireContainerPhrasing();
+	const {toMarkdown: gfmTableToMarkdown} = requireMdastUtilGfmTable();
 	const {wrap, isURL, escapeSymbols, processUnsupportedTags} = requireUtils();
 	const createHandlers = (definitions, unsupportedTagsStrategy) => ({
 		heading: (node, _parent, context) => {
@@ -14207,7 +14224,7 @@ function requireTelegramify () {
 			const exit = context.enter('code');
 			const content = node.value.replace(/^#![a-z]+\n/, '');
 			exit();
-			return wrap(escapeSymbols(content, 'code'), '```', '\n');
+			return wrap(escapeSymbols(content, 'code'), '```', '\n')
 		},
 		link: (node, _parent, context) => {
 			const exit = context.enter('link');
@@ -14233,7 +14250,7 @@ function requireTelegramify () {
 		image: (node, _parent, context) => {
 			const exit = context.enter('image');
 			const text = node.alt || node.title;
-			const url = encodeURI(node.url);
+			const url = node.url;
 			exit();
 			if (!isURL(url)) return escapeSymbols(text) || escapeSymbols(url);
 			return text
@@ -14260,6 +14277,8 @@ function requireTelegramify () {
 			processUnsupportedTags(defaultHandlers.blockquote(node, _parent, context), unsupportedTagsStrategy),
 		html: (node, _parent, context) =>
 			processUnsupportedTags(defaultHandlers.html(node, _parent, context), unsupportedTagsStrategy),
+		table: (node, _parent, context) =>
+			processUnsupportedTags(gfmTableToMarkdown().handlers.table(node, _parent, context), unsupportedTagsStrategy),
 	});
 	const createOptions = (definitions, unsupportedTagsStrategy) => ({
 		bullet: '*',
